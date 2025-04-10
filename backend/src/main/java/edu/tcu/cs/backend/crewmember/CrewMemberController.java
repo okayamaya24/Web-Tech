@@ -1,23 +1,24 @@
 package edu.tcu.cs.backend.crewmember;
 
-
+import edu.tcu.cs.backend.dto.CrewMemberRegistrationRequest;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 @RestController
 @RequestMapping("/api/crew-members")
 public class CrewMemberController {
 
-    public final CrewMemberService service;
+    private final CrewMemberService crewMemberService;
 
-    public CrewMemberController(CrewMemberService service) {
-        this.service = service;
+    public CrewMemberController(CrewMemberService crewMemberService) {
+        this.crewMemberService = crewMemberService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CrewMember> getCrewMemberById(@PathVariable Long id) {
-        CrewMember found = service.getCrewMemberById(id);
-        return ResponseEntity.ok(found);
+    @PostMapping("/register")
+    public ResponseEntity<String> registerCrewMember(@Valid @RequestBody CrewMemberRegistrationRequest request) {
+        crewMemberService.registerCrewMember(request);
+        return new ResponseEntity<>("Crew member registered successfully!", HttpStatus.CREATED);
     }
 }
