@@ -21,4 +21,10 @@ public class CrewMemberController {
         crewMemberService.registerCrewMember(request);
         return new ResponseEntity<>("Crew member registered successfully!", HttpStatus.CREATED);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CrewMember> getCrewMemberById(@PathVariable Long id) {
+        CrewMember crewMember = crewMemberService.getCrewMemberById(id);
+        return new ResponseEntity<>(crewMember, HttpStatus.OK);
+    }
 }

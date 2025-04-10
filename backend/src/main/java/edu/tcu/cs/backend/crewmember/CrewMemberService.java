@@ -28,4 +28,9 @@ public class CrewMemberService {
 
         crewMemberRepository.save(newMember);
     }
+
+    public CrewMember getCrewMemberById(Long id) {
+        return crewMemberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Crew member not found with ID: " + id));
+    }
 }
