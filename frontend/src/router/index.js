@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ViewCrewProfile from '../components/ViewCrewProfile.vue'
 import RegisterCrewMember from '../components/RegisterCrewMember.vue'
+import AdminView from '../views/AdminView.vue';
 // Add other imports as needed
 
 const routes = [
@@ -12,7 +13,14 @@ const routes = [
   { path: '/crew/:id',
     name: 'ViewCrewProfile', 
     component: ViewCrewProfile
-  }
+  },
+
+  {
+    path: '/admin',
+    name: 'AdminView',
+    component: AdminView,
+  },
+  
 ]
 
 const router = createRouter({
