@@ -10,7 +10,7 @@
       <label for="email">Email:</label>
       <input type="email" id="email" name="email" required v-model="formData.email">
       <label for="phone">Phone Number:</label>
-      <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required v-model="formData.phone"> <br />
+      <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required v-model="formData.phone" placeholder="Format: 123-456-7890"> <br />
       <label for="password">Password:</label>
       <input type="password" id="password" name="password" required v-model="formData.password">
       <label for="role">Role:</label>
