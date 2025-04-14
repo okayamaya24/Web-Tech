@@ -5,10 +5,12 @@ import AdminView from '../views/AdminView.vue';
 // Add other imports as needed
 
 const routes = [
-  { path: '/', 
-    name: 'Register',
-    component: RegisterCrewMember 
-  },
+  {
+  path: '/register',
+  name: 'RegisterCrewMember',
+  component: () => import('../components/RegisterCrewMember.vue'), // or '../views/' if it moved
+  props: route => ({ token: route.query.token })
+},
 
   { path: '/crew/:id',
     name: 'ViewCrewProfile', 
