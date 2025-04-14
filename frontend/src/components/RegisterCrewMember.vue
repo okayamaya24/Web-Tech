@@ -38,14 +38,12 @@
     <button @click="editInput">Edit</button>
     <button @click="submitForm">Submit</button>
   </div>
-
-
   </div>
-
 </template>
 
 <script setup>
 import { reactive, ref } from 'vue';
+import axios from 'axios';
 
 const formData = reactive({
   firstName: '',
@@ -67,11 +65,27 @@ function editInput() {
   isConfirming.value = false;
 }
 
-function submitForm() {
-  console.log('Form submitted', formData);
+ async function submitForm() {
+   const crewMemberData = {
+     firstName: formData.firstName,
+     lastName: formData.lastName,
+     email: formData.email,
+     phoneNumber: formData.phone,
+     password: formData.password,
+     role: formData.role,
+     qualifiedPosition: formData.qualifiedPos
+   };
+
+   try {
+     const respone = await axios.post('http://localhost:8080/api/crew-members/register', crewMemberData);
+    console.log('Crew member registered:', response.data);
+     alert('Registration successful!');
+      } catch (error) {
+     console.error('Error during registration:', error.response?.data || error.message);
+    alert('Registration failed. Please try again.');
+  }
 }
 </script>
-
 
 <style scoped>
 input:invalid {
