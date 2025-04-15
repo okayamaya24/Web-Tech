@@ -45,6 +45,7 @@
 
 <script setup>
 import { reactive, ref } from 'vue';
+import {useRouter} from 'vue-router';
 import axios from 'axios';
 
 const formData = reactive({
@@ -77,7 +78,6 @@ function editInput() {
   isConfirming.value = false;
 }
 
-// need to implement logic of an already existing user here
  async function submitForm() {
    const crewMemberData = {
      firstName: formData.firstName,
@@ -93,9 +93,19 @@ function editInput() {
      const respone = await axios.post('http://localhost:8080/api/crew-members/register', crewMemberData);
     console.log('Crew member registered:', response.data);
      alert('Registration successful!');
+     router.push('/login'); //if the registration is successful, redirecting to the login page
       } catch (error) {
-     console.error('Error during registration:', error.response?.data || error.message);
-    alert('Registration failed. Please try again.');
+        const errorMsg = error.response?.data?.essage || '';
+
+        if(errorMsg.includes('already exists')) {
+          const goToLogin = confirm('An account with this email already exists. Would you like to go to the login page?');
+          if(goToLogin) {
+            router.push('/login'); // case where email already exists, go to login, if needed, change path name based on what it is to route to login
+          }
+        } else {
+          console.error('Error during registration:', error.response?.data || error.message);
+          alert('Registration failed. Please try again.');
+        }
   }
 }
 </script>
