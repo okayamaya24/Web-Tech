@@ -9,19 +9,20 @@ import java.util.List;
 @RequestMapping("/api/games")
 public class GameController {
 
-    private final GameService gameService;
+    private final GameRepository gameRepository;
 
-    public GameController(GameService gameService) {
-        this.gameService = gameService;
+    public GameController(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
     }
-
+    
     @GetMapping
-    public ResponseEntity<List<Game>> getGameSchedule() {
-        List<Game> games = gameService.getAllGames();
-
-        if (games.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(games);
+    public List<Game> getAllGames() {
+        return gameRepository.findAll();
+    }
+    
+    @PostMapping
+    public ResponseEntity<Game> createGame(@RequestBody Game game) {
+        Game savedGame = gameRepository.save(game);
+        return ResponseEntity.ok(savedGame);
     }
 }
