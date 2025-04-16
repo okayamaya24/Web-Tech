@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import edu.tcu.cs.backend.crewmember.dto.CrewMemberRequestDTO;
 
+import java.util.List;
+
 @Service
 public class CrewMemberService {
 
@@ -33,5 +35,8 @@ public class CrewMemberService {
 
     public CrewMember findByEmail(String email) {
         return crewMemberRepository.findByEmail(email).orElse(null);
+    }
+    public List<CrewMember> getAllCrewMembers() {
+        return crewMemberRepository.findAll();
     }
 }
