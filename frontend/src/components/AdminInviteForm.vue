@@ -1,17 +1,19 @@
 <template>
   <div class="invite-form">
-    <h2 class="title">Invite a New Crew Member</h2>
+    <h2>Invite a New Crew Member</h2>
 
     <input
       v-model="email"
       type="email"
-      placeholder="Enter crew member email"
+      placeholder="Enter crew member's email"
       class="input"
     />
 
     <button @click="sendInvite" class="btn">Send Invitation</button>
 
-    <p v-if="message" :class="{ success: success, error: !success }">{{ message }}</p>
+    <p v-if="message" :class="{ success: success, error: !success }">
+      {{ message }}
+    </p>
   </div>
 </template>
 
@@ -24,24 +26,27 @@ const message = ref('');
 const success = ref(false);
 
 async function sendInvite() {
+  message.value = '';
+  success.value = false;
+
+  if (!email.value.includes('@')) {
+    message.value = 'Please enter a valid email address.';
+    return;
+  }
+
   try {
     const response = await axios.post(
       `http://localhost:8080/api/invitations?email=${email.value}`,
-      {},
-      {
-        auth: {
-          username: 'admin@frogcrew.com', // For now, static — swap out for login-based auth later
-          password: 'admin123',
-        },
-      }
+      {}
     );
-    message.value = response.data;
     success.value = true;
-    email.value = '';
-  } catch (err) {
-    message.value =
-      err.response?.data?.message || 'Failed to send invitation.';
+    message.value = 'Invitation sent successfully!';
+    email.value = ''; // Clear input
+  } catch (error) {
     success.value = false;
+    console.error('Error sending invitation:', error);
+    message.value =
+      error.response?.data || 'Failed to send invitation. Please try again.';
   }
 }
 </script>
