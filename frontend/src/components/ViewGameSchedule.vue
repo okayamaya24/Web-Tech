@@ -43,8 +43,8 @@
 </template>
 
 <script setup>
-
-import { reactive, ref } from 'vue'
+import { reactive, ref } from 'vue';
+import axios from 'axios';
 
 const games = reactive([
   {
@@ -69,11 +69,11 @@ function addGame() {
 }
 
 function removeGame(index) {
-  games.splice(index, 1)
+  games.splice(index, 1);
 }
 
-function saveSchedule() {
-    submitted.value = true
+ async function saveSchedule() {
+    submitted.value = true;
 
   const validGames = games.filter(
     (g) =>
@@ -81,18 +81,31 @@ function saveSchedule() {
       g.datetime &&
       g.venue.trim() &&
       g.crew.trim()
-  )
+  );
 
   if (validGames.length === 0) {
     alert('Please enter at least one complete valid game entry before saving. Check for invalid entries.')
-    return
+    return;
   }
 
-  //should replace this with logic to connect with the backend
-  console.log('Saving schedule:', validGames)
-  alert('Schedule saved!')
-} 
-
+try {
+    for (const game of validGames) {
+      await axios.post('http://localhost:8080/api/games', {
+        sport: game.sport,
+        date: game.datetime.split('T')[0],
+        time: game.datetime.split('T')[1],
+        network: game.venue,
+        homeTeam: 'TCU',
+        awayTeam: game.opponent || 'N/A'
+      });
+    }
+    
+    alert('Schedule saved successfully!')
+  } catch (error) {
+    console.error('Error saving games:', error)
+    alert('Failed to save schedule. Please try again.')
+  }
+}
 </script>
 
 <style scoped>
