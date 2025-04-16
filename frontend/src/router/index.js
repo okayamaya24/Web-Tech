@@ -7,6 +7,10 @@ import Login from '../components/Login.vue';
 
 const routes = [
   {
+    path: '/',
+    redirect: '/register'
+  },
+  {
   path: '/register',
   name: 'RegisterCrewMember',
   component: () => import('../components/RegisterCrewMember.vue'), // or '../views/' if it moved
