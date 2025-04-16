@@ -92,12 +92,17 @@ function editInput() {
    };
 
    try {
-     const respone = await axios.post('http://localhost:8080/api/crew-members/register', crewMemberData);
+     const response = await axios.post('http://localhost:8080/api/crew-members/register', crewMemberData);
     console.log('Crew member registered:', response.data);
      alert('Registration successful!');
+
+       //  Clear the form + reset confirmation state
+  Object.keys(formData).forEach(key => formData[key] = '');
+  isConfirming.value = false;
+     
      router.push('/login'); //if the registration is successful, redirecting to the login page
       } catch (error) {
-        const errorMsg = error.response?.data?.essage || '';
+        const errorMsg = error.response?.data || '';
 
         if(errorMsg.includes('already exists')) {
           const goToLogin = confirm('An account with this email already exists. Would you like to go to the login page?');
