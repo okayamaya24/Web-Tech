@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ViewCrewProfile from '../components/ViewCrewProfile.vue'
-import RegisterCrewMember from '../components/RegisterCrewMember.vue'
 import AdminView from '../views/AdminView.vue';
 import Login from '../components/Login.vue';
 // Add other imports as needed
@@ -33,6 +32,26 @@ const routes = [
     name: 'login',
     component: Login
   },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../components/Dashboard.vue')
+   },
+  {
+    path: '/availability',
+    name: 'availability',
+    component: () => import('../components/AvailabilityForm.vue')
+  },
+  {
+    path: '/crew',
+    name: 'crew',
+    component: () => import('../components/CrewList.vue')
+  },
+  {
+    path: '/viewGameSchedule',
+    name: 'viewGameSchedule',
+    compoenent: () => import('../components/GameForm.vue')
+  }
   
 ]
 
