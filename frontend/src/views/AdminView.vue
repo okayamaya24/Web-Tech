@@ -1,7 +1,6 @@
 <template>
     <div class="admin-view">
       <h1>Welcome, Admin</h1>
-      <AdminInviteForm />
       <!-- You can also add AdminCrewList, ScheduleBuilder, etc. here later -->
     </div>
   </template>

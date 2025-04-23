@@ -1,16 +1,48 @@
 <template>
     <div class=".dashboard-layout">
         <nav>
-        <router-link :to="{name: 'viewGameSchedule'}">View Game Schedule</router-link>
-        <router-link :to="{name: 'crew'}">View Crew List</router-link>
-        <router-link :to="{name: 'availability'}">Availability</router-link>
+        <router-link 
+        v-for="link in navLinks"
+        :key="link.name"
+        :to="{name: link.name}">
+            {{ link.label }}
+        </router-link>
         </nav>
         <router-view></router-view>
     </div>
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { defineProps } from 'vue'
 
+const props = defineProps({
+  userRole: {
+    type: String,
+    required: true,
+  },
+})
+
+const navLinks = computed(() => {
+  if (props.userRole === 'admin') {
+    return [
+      { name: 'adminView', label: 'Admin Home' },
+      { name: 'inviteCrewMember', label: 'Invite Crew Member'},
+      { name: 'createGameSchedule', label: 'Create Game Schedule' },
+      { name: 'manageGameSchedule', label: 'Manage Game Schedule' },
+      { name: 'manageCrew', label: 'Manage Crew Members' },
+      { name: 'scheduleCrew', label: 'Schedule Crew' },
+    ]
+  } else {
+    // crew member
+    return [
+      { name: 'home', label: 'Home' },
+      { name: 'viewGameSchedule', label: 'View Game Schedule' },
+      { name: 'crew', label: 'View Crew List' },
+      { name: 'availability', label: 'Availability' },
+    ]
+  }
+})
 </script>
 
 <style scoped>
@@ -21,7 +53,7 @@
     gap: 1rem;
     
   }
-  
+
 nav {
         display: flex;
         justify-content: center;

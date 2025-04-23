@@ -51,6 +51,26 @@ const routes = [
     path: '/viewGameSchedule',
     name: 'viewGameSchedule',
     compoenent: () => import('../components/GameForm.vue')
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: () => import('../components/Home.vue'),
+  },
+  {
+    path: '/createGameSchedule',
+    name: 'createGameSchedule',
+    component: () => import('../components/ViewGameSchedule.vue')
+  },
+  {
+    path: '/manageGameSchedule',
+    name: 'manageGameSchedule',
+    component: () => import('../components/AdminAddsGames.vue')
+  },
+  {
+    path: '/inviteCrewMember',
+    name: 'inviteCrewMember',
+    component: () => import('../components/AdminInviteForm.vue')
   }
   
 ]
