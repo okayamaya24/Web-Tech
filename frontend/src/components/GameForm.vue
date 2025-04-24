@@ -6,17 +6,18 @@
     <div v-else>
     <h1>Upcoming Game Schedules</h1>
     <div class="controls">
-    <input v-model="searchQuery" placeholder="Search by sport, venue, or opponent..." />
+    <input v-model="searchQuery" placeholder="Search by date, venue, or opponent..." />
     
     <select v-model="selectedSport">
       <option value="">All Sports</option>
       <option v-for="sport in uniqueSports" :key="sport" :value="sport">{{ formatSport(sport) }}</option>
     </select>
 
-    <select v-model="sortBy">
-      <option value="datetime">Date & Time</option>
-      <option value="sport">Sport</option>
-      <option value="venue">Venue</option>
+    <label for="sort">Sort by:</label>
+    <select id="sort" v-model="sortBy">
+    <option value="datetime">Date (Newest to Oldest)</option>
+    <option value="venue">Venue</option>
+    <option value="opponent">Opponent</option>
     </select>
     </div>
     <table>
@@ -76,29 +77,36 @@ const uniqueSports = computed(() => {
 
 // Computed filtered and sorted games
 const filteredAndSortedGames = computed(() => {
-  let filtered = gameSchedule.value
+  let filtered = gameSchedule.value;
 
-  if (selectedSport.value) {
-    filtered = filtered.filter(game => game.sport === selectedSport.value)
-  }
-
-  if (searchQuery.value.trim()) {
-    const q = searchQuery.value.toLowerCase()
+  // Search filter
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase();
     filtered = filtered.filter(game =>
-      game.sport.toLowerCase().includes(q) ||
-      game.venue.toLowerCase().includes(q) ||
-      game.opponent.toLowerCase().includes(q)
-    )
+      game.venue.toLowerCase().includes(query) ||
+      game.opponent.toLowerCase().includes(query)
+    );
   }
 
-  return [...filtered].sort((a, b) => {
-    if (sortBy.value === 'datetime') {
-      return new Date(a.datetime) - new Date(b.datetime)
-    } else {
-      return a[sortBy.value].localeCompare(b[sortBy.value])
+  // Sport filter
+  if (selectedSport.value) {
+    filtered = filtered.filter(game => game.sport === selectedSport.value);
+  }
+
+    // Sorting logic
+    return [...filtered].sort((a, b) => {
+    switch (sortBy.value) {
+      case 'datetime':
+        return new Date(b.datetime) - new Date(a.datetime); // Newest to oldest
+      case 'venue':
+        return a.venue.localeCompare(b.venue);
+      case 'opponent':
+        return a.opponent.localeCompare(b.opponent);
+      default:
+        return 0;
     }
-  })
-})
+  });
+});
 
 function formatDate(datetime) {
   const date = new Date(datetime)
