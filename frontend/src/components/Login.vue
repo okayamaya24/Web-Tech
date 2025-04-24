@@ -80,7 +80,7 @@ async function handleLogin() {
                 transition: all 0.3s ease;
 
                 &:focus {
-                    border-color: purple;
+                    border-color: #4D1979;
                     box-shadow: 0 0 4px rgba(123, 0, 255, 0.5);
                     outline: none;
                 }
@@ -91,7 +91,7 @@ async function handleLogin() {
             padding: 0.75rem;
             border: none;
             border-radius: 6px;
-            background-color: purple;
+            background-color: #4D1979;
             color: #fff;
             font-size: 1rem;
             font-weight: bold;
@@ -99,7 +99,7 @@ async function handleLogin() {
             transition: all 0.3s ease;
 
             &:hover {
-                background-color: purple;
+                background-color: #4D1979;
                 box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
                 transform: translateY(-3px);
             }

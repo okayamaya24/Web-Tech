@@ -73,7 +73,7 @@ const searchQuery = ref('')
 const selectedSport = ref('')
 const sortBy = ref('datetime')
 
-const selectedGame = ref(null); // holds the game that was clicked
+const selectedGame = ref(null);
 
 function selectGame(game) {
   selectedGame.value = game;
@@ -96,11 +96,9 @@ const uniqueSports = computed(() => {
   return [...new Set(sports)]
 })
 
-// Computed filtered and sorted games
 const filteredAndSortedGames = computed(() => {
   let filtered = gameSchedule.value;
 
-  // Search filter
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase();
     filtered = filtered.filter(game =>
@@ -114,11 +112,10 @@ const filteredAndSortedGames = computed(() => {
     filtered = filtered.filter(game => game.sport === selectedSport.value);
   }
 
-    // Sorting logic
     return [...filtered].sort((a, b) => {
     switch (sortBy.value) {
       case 'datetime':
-        return new Date(b.datetime) - new Date(a.datetime); // Newest to oldest
+        return new Date(b.datetime) - new Date(a.datetime);
       case 'venue':
         return a.venue.localeCompare(b.venue);
       case 'opponent':
@@ -150,7 +147,7 @@ function formatSport(sport) {
 .no-schedule {
   justify-content: center;
   align-items: center;
-  height: 200px; /* or whatever height you prefer */
+  height: 200px;
   max-width: 500px;
   margin: 2rem auto;
   padding: 2rem;
