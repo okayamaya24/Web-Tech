@@ -50,7 +50,7 @@ const routes = [
   {
     path: '/viewGameSchedule',
     name: 'viewGameSchedule',
-    compoenent: () => import('../components/GameForm.vue')
+    component: () => import('../components/GameForm.vue')
   },
   {
     path: '/home',
