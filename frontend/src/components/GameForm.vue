@@ -21,6 +21,18 @@
     </select>
     </div>
     <table>
+        <div v-if="selectedGame" class="game-details">
+        <h2>Game Details</h2>
+        <p><strong>Sport:</strong> {{ formatSport(selectedGame.sport) }}</p>
+        <p><strong>Date & Time:</strong> {{ formatDate(selectedGame.datetime) }}</p>
+        <p><strong>Venue:</strong> {{ selectedGame.venue }}</p>
+        <p><strong>Opponent:</strong> {{ selectedGame.opponent }}</p>
+        <p><strong>Crew Positions:</strong></p>
+        <ul>
+        <li v-for="(role, index) in selectedGame.crew" :key="index">{{ role }}</li>
+        </ul>
+        <button @click="selectedGame = null">Close</button>
+        </div>
       <thead>
         <tr>
           <th>Sport</th>
@@ -31,7 +43,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(game, index) in gameSchedule" :key="index">
+        <tr v-for="(game, index) in filteredAndSortedGames"
+        :key="index"
+        @click="selectGame(game)"
+        style="cursor: pointer; background-color: #f9f9f9;" >
           <td>{{ formatSport(game.sport) }}</td>
           <td>{{ formatDate(game.datetime) }}</td>
           <td>{{ game.venue }}</td>
@@ -57,6 +72,12 @@ const gameScheduleAvailable = ref(false)
 const searchQuery = ref('')
 const selectedSport = ref('')
 const sortBy = ref('datetime')
+
+const selectedGame = ref(null); // holds the game that was clicked
+
+function selectGame(game) {
+  selectedGame.value = game;
+}
 
 onMounted(async () => {
   try {
@@ -153,5 +174,14 @@ function formatSport(sport) {
 .controls select {
   padding: 0.5rem;
   font-size: 1rem;
+}
+
+.game-details {
+  margin-top: 2rem;
+  padding: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 </style>
