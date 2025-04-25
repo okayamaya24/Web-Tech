@@ -81,38 +81,38 @@ function editInput() {
 }
 
  async function submitForm() {
-   const crewMemberData = {
-     firstName: formData.firstName,
-     lastName: formData.lastName,
-     email: formData.email,
-     phoneNumber: formData.phone,
-     password: formData.password,
-     role: formData.role,
-     qualifiedPosition: formData.qualifiedPos
-   };
+  const crewMemberData = {
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    email: formData.email,
+    phoneNumber: formData.phone,
+    password: formData.password,
+    role: formData.role,
+    qualifiedPosition: formData.qualifiedPos
+  };
 
-   try {
-     const response = await axios.post('http://localhost:8080/api/crew-members/register', crewMemberData);
+  try {
+    const response = await axios.post('http://localhost:8080/api/crew-members/register', crewMemberData);
     console.log('Crew member registered:', response.data);
-     alert('Registration successful!');
+    alert('Registration successful!');
 
-       //  Clear the form + reset confirmation state
-  Object.keys(formData).forEach(key => formData[key] = '');
-  isConfirming.value = false;
-     
-     router.push('/login'); //if the registration is successful, redirecting to the login page
-      } catch (error) {
-        const errorMsg = error.response?.data || '';
+    // Reset form and state
+    Object.keys(formData).forEach(key => formData[key] = '');
+    isConfirming.value = false;
 
-        if(errorMsg.includes('already exists')) {
-          const goToLogin = confirm('An account with this email already exists. Would you like to go to the login page?');
-          if(goToLogin) {
-            router.push('/login'); // case where email already exists, go to login, if needed, change path name based on what it is to route to login
-          }
-        } else {
-          console.error('Error during registration:', error.response?.data || error.message);
-          alert('Registration failed. Please try again.');
-        }
+    router.push('/login');
+  } catch (error) {
+    const errorMsg = error.response?.data?.message || error.response?.data || '';
+
+    if (errorMsg.includes('already exists')) {
+      const goToLogin = confirm('An account with this email already exists. Would you like to go to the login page?');
+      if (goToLogin) {
+        router.push('/login');
+      }
+    } else {
+      console.error('Error during registration:', errorMsg || error.message);
+      alert('Registration failed. Please try again.');
+    }
   }
 }
 </script>
