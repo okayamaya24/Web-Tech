@@ -1,6 +1,9 @@
 package edu.tcu.cs.backend.game;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -36,5 +39,28 @@ public class GameController {
 
             return dto;
         }).collect(Collectors.toList());
+    }
+
+     @PostMapping("/schedule")
+    public ResponseEntity<?> createGames(@RequestBody List<GameDTO> newGames) {
+        List<Game> savedGames = newGames.stream().map(dto -> {
+            Game game = new Game();
+            game.setSport(dto.getSport());
+            game.setVenue(dto.getVenue());
+            game.setOpponent(dto.getOpponent());
+
+            try {
+                String[] dateTimeParts = dto.getDatetime().split("T");
+                game.setGameDate(LocalDate.parse(dateTimeParts[0]));
+                game.setGameTime(LocalTime.parse(dateTimeParts[1]));
+            } catch (Exception e) {
+                throw new RuntimeException("Invalid datetime format: " + dto.getDatetime());
+            }
+
+            game.setRequiredCrewPositions(dto.getCrew());
+            return game;
+        }).map(gameRepository::save).toList();
+
+        return ResponseEntity.ok(savedGames);
     }
 }
