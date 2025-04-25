@@ -16,9 +16,10 @@ const routes = [
   props: route => ({ token: route.query.token })
 },
 
-  { path: '/crew/:id',
+  { path: '/view-profile/:email',
     name: 'ViewCrewProfile', 
-    component: ViewCrewProfile
+    component: () => import('../components/ViewCrewProfile.vue'),
+    props: true
   },
 
   {
@@ -32,11 +33,6 @@ const routes = [
     name: 'login',
     component: Login
   },
-  {
-    path: '/dashboard',
-    name: 'dashboard',
-    component: () => import('../components/Dashboard.vue')
-   },
   {
     path: '/availability',
     name: 'availability',
