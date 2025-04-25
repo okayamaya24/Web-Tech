@@ -2,7 +2,7 @@ package edu.tcu.cs.backend.dto;
 
 import jakarta.validation.constraints.*;
 
-public class CrewMemberRegistrationRequest {
+public class CrewMemberRequestDTO {
     @NotBlank(message = "First name is required.")
     private String firstName;
 
@@ -26,7 +26,7 @@ public class CrewMemberRegistrationRequest {
     @NotBlank(message = "Qualified position is required.")
     private String qualifiedPosition;
 
-    public CrewMemberRegistrationRequest() {
+    public CrewMemberRequestDTO() {
     }
 
     // Getters and Setters
