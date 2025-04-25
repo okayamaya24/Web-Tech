@@ -7,7 +7,11 @@
         :to="{name: link.name}">
             {{ link.label }}
         </router-link>
-        </nav>
+        <!-- Profile Icon -->
+      <span class="profile-icon" @click="goToProfile">
+        <i class="fas fa-user-circle"></i>
+      </span>
+    </nav>
         <router-view></router-view>
     </div>
 </template>
@@ -15,6 +19,7 @@
 <script setup>
 import { computed } from 'vue'
 import { defineProps } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   userRole: {
@@ -43,6 +48,16 @@ const navLinks = computed(() => {
     ]
   }
 })
+
+function goToProfile() {
+  const email = localStorage.getItem('userEmail')
+  if (email) {
+    router.push({ name: 'ViewProfile', params: { email } })
+  } else {
+    alert("You're not logged in.")
+    router.push('/login')
+  }
+}
 </script>
 
 <style scoped>
@@ -78,5 +93,23 @@ nav a {
   color: #ffffff;
   font-weight: 500;
   transition: color 0.3s ease;
+}
+
+    .router-link-active {
+  background-color: white;
+  color: black;
+  border-color: black;
+  border-radius: 6px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.profile-icon {
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 }
 </style>
