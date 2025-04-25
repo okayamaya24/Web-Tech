@@ -1,8 +1,9 @@
 <template>
-  <h1>Create a Crew Member Profile</h1>
-  Details
-  <div>
-  <form v-if="!isConfirming" @submit.prevent="confirmInput" name="detailsForm">
+  <div class="page-background">
+    <div class="form-container">
+      <h1>Create a Crew Member Profile</h1>
+      <p class="subtitle">Details</p>
+      <form v-if="!isConfirming" @submit.prevent="confirmInput" name="detailsForm">
       <label for="firstName">First Name:</label>
       <input type="text" id="firstName" name="firstName" required v-model="formData.firstName" placeholder="'John'" @blur="touched.firstName = true" :class="{ 'invalid': touched.firstName && !formData.firstName }">
       <label for="lastName">Last Name:</label>
@@ -16,18 +17,26 @@
       <label for="role">Role:</label>
       <input type="text" id="role" name="role" required v-model="formData.role" placeholder="Enter Your Role Here" @blur="touched.role = true" :class="{ 'invalid': touched.role && !formData.role }"> <br />
       <div :class="{ 'invalid-radio': touched.qualifiedPos && !formData.qualifiedPos }" @blur="touched.qualifiedPos = true" tabindex="0">
-        <label for="qualifiedPos">Qualified Position:</label>
-        <input type="radio" id="sport-broadcasters" name="qualifiedPos" required value="Sport Broadcaster" v-model="formData.qualifiedPos">
-        <label for="sport-broadcasters">Sport Broadcaster</label> 
-        <input type="radio" id="paid-freelancers" name="qualifiedPos" required value="Paid Freelancer" v-model="formData.qualifiedPos">
-        <label for="paid-freelancers">Paid Freelancer</label>
-        <input type="radio" id="paid-students" name="qualifiedPos" required value="Paid Student" v-model="formData.qualifiedPos">
-        <label for="paid-students">Paid Student</label> <br />
-      </div>
+  <label>Qualified Position:</label>
+  <div class="radio-group">
+    <label class="radio-option">
+      <input type="radio" name="qualifiedPos" required value="Sport Broadcaster" v-model="formData.qualifiedPos">
+      Sport Broadcaster
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="qualifiedPos" required value="Paid Freelancer" v-model="formData.qualifiedPos">
+      Paid Freelancer
+    </label>
+    <label class="radio-option">
+      <input type="radio" name="qualifiedPos" required value="Paid Student" v-model="formData.qualifiedPos">
+      Paid Student
+    </label>
+  </div>
+</div>
       <input type="submit" value="Submit">
-  </form>
+    </form>
 
-  <div v-if="isConfirming">
+    <div v-if="isConfirming">
     <h3>Confirm Your Information</h3>
     <p>First Name: {{ formData.firstName }}</p>
     <p>Last Name: {{ formData.lastName }}</p>
@@ -39,6 +48,7 @@
 
     <button @click="editInput">Edit</button>
     <button @click="submitForm">Submit</button>
+    </div>
   </div>
   </div>
 </template>
@@ -96,7 +106,7 @@ function editInput() {
     console.log('Crew member registered:', response.data);
     alert('Registration successful!');
 
-    // Reset form and state
+    
     Object.keys(formData).forEach(key => formData[key] = '');
     isConfirming.value = false;
 
@@ -118,12 +128,91 @@ function editInput() {
 </script>
 
 <style scoped>
-  .invalid {
+.page-background {
+  background-color: #4D1979;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.form-container {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+h1 {
+  color: #4D1979;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  margin-bottom: 1.5rem;
+  font-weight: bold;
+}
+
+label {
+  display: block;
+  margin: 0.5rem 0 0.25rem;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="submit"] {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+input[type="submit"],
+button {
+  background-color: #4D1979;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+
+input[type="submit"]:hover,
+button:hover {
+  background-color: #6E2599;
+}
+
+.invalid {
   border: 2px dashed red;
 }
 
 .invalid-radio {
   border: 2px dashed red;
   padding: 10px;
+}
+
+input[type="radio"] {
+  margin-right: 5px;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 </style>

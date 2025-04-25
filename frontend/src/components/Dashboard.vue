@@ -1,5 +1,5 @@
 <template>
-    <div class=".dashboard-layout">
+    <div class="dashboard-layout">
         <nav>
         <router-link 
         v-for="link in navLinks"

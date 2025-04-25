@@ -5,5 +5,6 @@ import router from './router'
 //import App from './components/AdminAddsGames.vue'
 //import App from './components/Login.vue'
 import App from './components/Dashboard.vue'
+//import App from './components/RegisterCrewMember.vue'
 
 createApp(App).use(router).mount('#app')
