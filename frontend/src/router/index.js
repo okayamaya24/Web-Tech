@@ -66,6 +66,11 @@ const routes = [
     name: 'manageGameSchedule',
     component: () => import('../components/AdminAddsGames.vue')
   },
+  {
+    path: '/manageCrew',
+    name: 'manageCrew',
+    component: () => import('../components/AdminCrewList.vue')
+  },
 ]
 
 const router = createRouter({
