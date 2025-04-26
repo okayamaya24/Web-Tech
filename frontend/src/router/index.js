@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import ViewCrewProfile from '../components/ViewCrewProfile.vue'
+import RegisterCrewMember from '../components/RegisterCrewMember.vue'
+import AdminInviteForm from '../components/AdminInviteForm.vue'
 import AdminView from '../views/AdminView.vue';
 import Login from '../components/Login.vue';
 // Add other imports as needed
@@ -16,7 +18,8 @@ const routes = [
   props: route => ({ token: route.query.token })
 },
 
-  { path: '/view-profile/:email',
+  { 
+    path: '/view-profile/:email',
     name: 'ViewCrewProfile', 
     component: () => import('../components/ViewCrewProfile.vue'),
     props: true
@@ -63,17 +66,26 @@ const routes = [
     name: 'manageGameSchedule',
     component: () => import('../components/AdminAddsGames.vue')
   },
-  {
-    path: '/inviteCrewMember',
-    name: 'inviteCrewMember',
-    component: () => import('../components/AdminInviteForm.vue')
-  }
-  
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes
+})
+
+// Role-based navigation guard
+router.beforeEach((to, from, next) => {
+  const userRole = localStorage.getItem('userRole')
+
+  // Admin-only route protection
+  const adminOnlyRoutes = ['AdminView', 'inviteCrewMember', 'createGameSchedule', 'manageGameSchedule']
+
+  if (adminOnlyRoutes.includes(to.name) && userRole !== 'admin') {
+    alert("Access denied. Admins only.");
+    return next('/home')
+  }
+
+  next()
 })
 
 export default router
