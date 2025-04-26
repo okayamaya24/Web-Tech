@@ -21,6 +21,8 @@ import { computed } from 'vue'
 import { defineProps } from 'vue'
 import { useRouter } from 'vue-router'
 
+  const router = useRouter()
+
 const props = defineProps({
 userRole: {
   type: String,
@@ -31,7 +33,7 @@ userRole: {
 const navLinks = computed(() => {
 if (props.userRole === 'admin') {
   return [
-    { name: 'adminView', label: 'Admin Home' },
+    { name: 'AdminView', label: 'Admin Home' },
     { name: 'inviteCrewMember', label: 'Invite Crew Member'},
     { name: 'createGameSchedule', label: 'Create Game Schedule' },
     { name: 'manageGameSchedule', label: 'Adds New Games to Game Schedule'},
@@ -51,13 +53,13 @@ if (props.userRole === 'admin') {
 })
 
 function goToProfile() {
-const email = localStorage.getItem('userEmail')
-if (email) {
-  router.push({ name: 'ViewProfile', params: { email } })
-} else {
-  alert("You're not logged in.")
-  router.push('/login')
-}
+  const email = localStorage.getItem('userEmail')
+  if (email) {
+    router.push({ name: 'viewCrewProfile', params: { email } })
+  } else {
+    alert("You're not logged in.")
+    router.push('/login')
+  }
 }
 </script>
 
