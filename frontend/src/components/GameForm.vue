@@ -81,7 +81,7 @@ selectedGame.value = game;
 
 onMounted(async () => {
 try {
-  const response = await axios.get('/api/schedule')
+  const response = await axios.get('http://localhost:8080/api/schedule')
   if (Array.isArray(response.data) && response.data.length > 0) {
     gameSchedule.value = response.data
     gameScheduleAvailable.value = true
