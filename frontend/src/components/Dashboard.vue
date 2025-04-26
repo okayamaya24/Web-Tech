@@ -33,15 +33,17 @@ userRole: {
 const navLinks = computed(() => {
 if (props.userRole === 'admin') {
   return [
+    //admin dashboard
     { name: 'AdminView', label: 'Admin Home' },
     { name: 'inviteCrewMember', label: 'Invite Crew Member'},
     { name: 'createGameSchedule', label: 'Create Game Schedule' },
     { name: 'manageGameSchedule', label: 'Adds New Games to Game Schedule'},
     { name: 'deleteCrew', label: 'Delete Crew Members'},
     { name: 'scheduleCrew', label: 'Schedule Crew' },
+    { name: 'viewCrew', label: 'View Crew Members'}
   ]
 } else {
-  // crew member
+  // crew member dashboard
   return [
     { name: 'home', label: 'Home' },
     { name: 'viewGameSchedule', label: 'View Game Schedule' },

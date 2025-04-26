@@ -78,6 +78,11 @@ const routes = [
     path: '/deleteCrew',
     name: 'deleteCrew',
     component: () => import('../components/AdminDeleteCrew.vue')
+   },
+   {
+    path: '/viewCrew',
+    name: 'viewCrew',
+    component: () => import('../components/AdminCrewList.vue')
    }
   
 ]
