@@ -34,8 +34,8 @@ if (props.userRole === 'admin') {
     { name: 'adminView', label: 'Admin Home' },
     { name: 'inviteCrewMember', label: 'Invite Crew Member'},
     { name: 'createGameSchedule', label: 'Create Game Schedule' },
-    { name: 'manageGameSchedule', label: 'Manage Game Schedule' },
-    { name: 'manageCrew', label: 'Manage Crew Members' },
+    { name: 'manageGameSchedule', label: 'Adds New Games to Game Schedule'},
+    { name: 'deleteCrew', label: 'Delete Crew Members'},
     { name: 'scheduleCrew', label: 'Schedule Crew' },
   ]
 } else {

@@ -68,7 +68,17 @@ const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('../components/Dashboard.vue')
-  }
+  },
+  {
+    path: '/scheduleCrew',
+    name: 'scheduleCrew',
+    component: () => import('../components/CrewAssignment.vue')
+   },
+   {
+    path: '/deleteCrew',
+    name: 'deleteCrew',
+    component: () => import('../components/AdminDeleteCrew.vue')
+   }
   
 ]
 
