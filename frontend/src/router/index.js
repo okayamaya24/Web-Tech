@@ -1,10 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ViewCrewProfile from '../components/ViewCrewProfile.vue'
-import RegisterCrewMember from '../components/RegisterCrewMember.vue'
-import AdminInviteForm from '../components/AdminInviteForm.vue'
-import AdminView from '../views/AdminView.vue';
-import Login from '../components/Login.vue';
-// Add other imports as needed
 
 const routes = [
   {
@@ -14,13 +8,12 @@ const routes = [
   {
   path: '/register',
   name: 'RegisterCrewMember',
-  component: () => import('../components/RegisterCrewMember.vue'), // or '../views/' if it moved
+  component: () => import('../components/RegisterCrewMember.vue'),
   props: route => ({ token: route.query.token })
 },
 
-  { 
-    path: '/view-profile/:email',
-    name: 'ViewCrewProfile', 
+  { path: '/view-profile/:email?',
+    name: 'viewCrewProfile', 
     component: () => import('../components/ViewCrewProfile.vue'),
     props: true
   },
@@ -28,13 +21,13 @@ const routes = [
   {
     path: '/admin',
     name: 'AdminView',
-    component: AdminView,
+    component: () => import('../views/AdminView.vue')
   },
 
   {
     path: '/login',
     name: 'login',
-    component: Login
+    component: () => import('../components/Login.vue')
   },
   {
     path: '/availability',
@@ -67,10 +60,16 @@ const routes = [
     component: () => import('../components/AdminAddsGames.vue')
   },
   {
-    path: '/manageCrew',
-    name: 'manageCrew',
-    component: () => import('../components/AdminCrewList.vue')
+    path: '/inviteCrewMember',
+    name: 'inviteCrewMember',
+    component: () => import('../components/AdminInviteForm.vue')
   },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: () => import('../components/Dashboard.vue')
+  }
+  
 ]
 
 const router = createRouter({
@@ -78,19 +77,5 @@ const router = createRouter({
   routes
 })
 
-// Role-based navigation guard
-router.beforeEach((to, from, next) => {
-  const userRole = localStorage.getItem('userRole')
-
-  // Admin-only route protection
-  const adminOnlyRoutes = ['AdminView', 'inviteCrewMember', 'createGameSchedule', 'manageGameSchedule']
-
-  if (adminOnlyRoutes.includes(to.name) && userRole !== 'admin') {
-    alert("Access denied. Admins only.");
-    return next('/home')
-  }
-
-  next()
-})
-
 export default router
+

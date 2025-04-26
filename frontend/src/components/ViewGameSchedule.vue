@@ -169,7 +169,6 @@ const games = reactive([
 const submitted = ref(false)
 
 const invalidIndices = computed(() => {
-// don't highlight anything if the user hasn't submitted yet
 if (!submitted.value) return []
 
 const hasAtLeastOneValid = games.some(
@@ -178,7 +177,6 @@ g => g.sport.trim() && g.datetime && g.venue.trim() && g.crew.length
 
 if (hasAtLeastOneValid) return []
 
-// if no valid game exists, mark invalid rows
 return games
 .map((g, i) => (!g.sport.trim() || !g.datetime || !g.venue.trim() || g.crew.length === 0) ? i : null)
 .filter(i => i !== null)
@@ -215,7 +213,6 @@ if (validGames.length === 0) {
   return
 }
 
-//should replace this with logic to connect with the backend
 
 fetch('/api/schedule', {
 method: 'POST',
@@ -233,7 +230,6 @@ return response.json();
 .then(data => {
 alert('Schedule saved!');
 console.log('Saved schedule data:', data);
-// optionally emit or share this data with another component here
 })
 .catch(error => {
 console.error('Error saving schedule:', error);
