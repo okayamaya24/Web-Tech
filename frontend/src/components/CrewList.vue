@@ -12,7 +12,7 @@
       </select>
     </div>
 
-    <div v-if="selectedGame">
+    <div v-if="crewAssignments.length">
       <table>
         <thead>
           <tr>
@@ -23,20 +23,26 @@
             <th>Position</th>
             <th>Name</th>
             <th>Report Time</th>
+            <th>Report Location</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(crew, index) in selectedGame.crew" :key="index">
+          <tr v-for="(crew, index) in crewAssignments" :key="index">
             <td>{{ selectedGame.sport }}</td>
             <td>{{ selectedGame.opponent }}</td>
-            <td>{{ formatDate(selectedGame.gameDate) }}</td>
-            <td>{{ formatTime(selectedGame.gameTime) }}</td>
+            <td>{{ formatDate(selectedGame.date) }}</td>
+            <td>{{ selectedGame.time }}</td>
             <td>{{ crew.position }}</td>
             <td>{{ crew.name }}</td>
             <td>{{ formatDateTime(crew.reportTime) }}</td>
+            <td>{{ crew.reportLocation }}</td>
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div v-else-if="selectedGame">
+      No crew assignments found for this game.
     </div>
 
     <div v-else>
@@ -47,16 +53,17 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
 const games = ref([]);
+const crewAssignments = ref([]);
 const selectedGameId = ref('');
 const selectedGame = ref(null);
 
 const fetchGames = async () => {
   try {
-    const response = await fetch('/api/schedule');
-    const data = await response.json();
-    games.value = data;
+   const response = await axios.get('http://localhost:8080/api/games');
+    games.value = response.data;
   } catch (error) {
     console.error('Error fetching games:', error);
   }
@@ -64,21 +71,31 @@ const fetchGames = async () => {
 
 const selectGame = () => {
   selectedGame.value = games.value.find(game => game.id === selectedGameId.value);
+
+  if (selectedGame.value) {
+    try {
+      const response = await axios.get(`http://localhost:8080/api/crew-assignments/game/${selectedGameId.value}`);
+      crewAssignments.value = response.data;
+    } catch (error) {
+      console.error('Error fetching crew assignments:', error);
+    }
+  }
 };
 
 const formatDate = (dateStr) => {
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  return new Date(dateStr).toLocaleDateString(undefined, options);
+  const date = new Date(dateStr);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 };
 
 const formatTime = (timeStr) => {
-  const options = { hour: '2-digit', minute: '2-digit' };
-  return new Date(timeStr).toLocaleTimeString(undefined, options);
+  return timeStr;
 };
 
 const formatDateTime = (dateStr) => {
-  const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-  return new Date(dateStr).toLocaleString(undefined, options);
+  const date = new Date(dateStr);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleString(undefined, { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 };
 
 onMounted(fetchGames);
