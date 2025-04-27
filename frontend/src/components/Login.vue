@@ -3,8 +3,8 @@
         <h2>Login</h2>
         <form @submit.prevent="handleLogin" class="login-form">
             <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" v-model="username" required placeholder="Enter your username">
+               <label for="email">Email</label>
+                <input type="email" id="email" name="email" v-model="email" required placeholder="Enter your email">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -23,15 +23,14 @@ import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
     
-const username = ref('')
+const email = ref('')
 const password = ref('')
 
 async function handleLogin() {
     try {
-        await login(username.value, password.value)
-
+       await login(email.value, password.value);
         //redirect to the page the user originally wanted to visit, or fallback to home
-        const redirectPath = route.query.redirect || { name: 'dashboard' }
+        const redirectPath = route.query.redirect || { name: 'home' }
         router.replace(redirectPath)
     } catch (error) {
         console.error(error)
