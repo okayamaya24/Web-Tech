@@ -55,12 +55,15 @@ if (props.userRole === 'admin') {
 })
 
 function goToProfile() {
-  const email = localStorage.getItem('userEmail')
+  const email = localStorage.getItem('userEmail');
+  
+  // If the user is logged in, navigate to their profile page
   if (email) {
-    router.push({ name: 'viewCrewProfile', params: { email } })
+    router.push({ name: 'viewCrewProfile', params: { email: email } });
   } else {
-    alert("You're not logged in.")
-    router.push('/login')
+    // Handle case if the user is not logged in
+    alert('You need to log in first');
+    router.push('/login');
   }
 }
 </script>
