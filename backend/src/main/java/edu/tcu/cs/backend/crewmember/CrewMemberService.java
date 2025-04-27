@@ -1,10 +1,8 @@
 package edu.tcu.cs.backend.crewmember;
 
+import edu.tcu.cs.backend.crewmember.dto.CrewMemberRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import edu.tcu.cs.backend.crewmember.dto.CrewMemberRequestDTO;
-
-import java.util.List;
 
 @Service
 public class CrewMemberService {
@@ -16,27 +14,40 @@ public class CrewMemberService {
         this.crewMemberRepository = crewMemberRepository;
     }
 
-    public CrewMember createProfile(CrewMemberRequestDTO dto) {
-        if (crewMemberRepository.existsByEmail(dto.email)) {
-            throw new IllegalArgumentException("Email already in use.");
+    public CrewMember createCrewMember(CrewMemberRequestDTO crewMemberRequestDTO) {
+        // Optional: Check if email already exists
+        if (crewMemberRepository.findByEmail(crewMemberRequestDTO.getEmail()).isPresent()) {
+            throw new IllegalStateException("Email already exists!");
         }
 
+        // Map DTO to Entity
         CrewMember crewMember = new CrewMember();
-        crewMember.setFirstName(dto.firstName);
-        crewMember.setLastName(dto.lastName);
-        crewMember.setEmail(dto.email);
-        crewMember.setPhoneNumber(dto.phoneNumber);
-        crewMember.setPassword(dto.password);
-        crewMember.setRole(dto.role);
-        crewMember.setQualifiedPosition(dto.qualifiedPosition);
+        crewMember.setFirstName(crewMemberRequestDTO.getFirstName());
+        crewMember.setLastName(crewMemberRequestDTO.getLastName());
+        crewMember.setEmail(crewMemberRequestDTO.getEmail());
+        crewMember.setPhoneNumber(crewMemberRequestDTO.getPhoneNumber());
+        crewMember.setPassword(crewMemberRequestDTO.getPassword());
+        crewMember.setRole(crewMemberRequestDTO.getRole());
+        crewMember.setQualifiedPosition(crewMemberRequestDTO.getQualifiedPosition());
 
         return crewMemberRepository.save(crewMember);
     }
 
-    public CrewMember findByEmail(String email) {
-        return crewMemberRepository.findByEmail(email).orElse(null);
+    public CrewMember getCrewMemberByEmail(String email) {
+        return crewMemberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("Crew member not found with email: " + email));
     }
-    public List<CrewMember> getAllCrewMembers() {
-        return crewMemberRepository.findAll();
+
+    public CrewMember updateCrewMember(String email, CrewMember updatedCrewMember) {
+        CrewMember existingCrewMember = crewMemberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("Crew member not found with email: " + email));
+
+        existingCrewMember.setFirstName(updatedCrewMember.getFirstName());
+        existingCrewMember.setLastName(updatedCrewMember.getLastName());
+        existingCrewMember.setPhoneNumber(updatedCrewMember.getPhoneNumber());
+        existingCrewMember.setRole(updatedCrewMember.getRole());
+        existingCrewMember.setQualifiedPosition(updatedCrewMember.getQualifiedPosition());
+
+        return crewMemberRepository.save(existingCrewMember);
     }
 }
