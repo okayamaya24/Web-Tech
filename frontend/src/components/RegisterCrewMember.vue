@@ -106,6 +106,7 @@ function editInput() {
     console.log('Crew member registered:', response.data);
     alert('Registration successful!');
 
+    localStorage.setItem('userEmail', formData.email);
     
     Object.keys(formData).forEach(key => formData[key] = '');
     isConfirming.value = false;
