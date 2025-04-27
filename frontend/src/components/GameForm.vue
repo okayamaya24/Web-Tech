@@ -24,19 +24,21 @@
       <div v-if="selectedGame" class="game-details">
       <h2>Game Details</h2>
       <p><strong>Sport:</strong> {{ formatSport(selectedGame.sport) }}</p>
-      <p><strong>Date & Time:</strong> {{ formatDate(selectedGame.datetime) }}</p>
+       <p><strong>Date:</strong> {{ selectedGame.date }}</p>
+      <p><strong>Time:</strong> {{ selectedGame.time }}</p>
       <p><strong>Venue:</strong> {{ selectedGame.venue }}</p>
       <p><strong>Opponent:</strong> {{ selectedGame.opponent }}</p>
       <p><strong>Crew Positions:</strong></p>
       <ul>
-      <li v-for="(role, index) in selectedGame.crew" :key="index">{{ role }}</li>
+      <li v-for="(role, index) in selectedGame.crewPositions" :key="index">{{ role }}</li>
       </ul>
       <button @click="selectedGame = null">Close</button>
       </div>
     <thead>
       <tr>
         <th>Sport</th>
-        <th>Date & Time</th>
+        <th>Date</th> 
+        <th>Time</th> 
         <th>Venue</th>
         <th>Opponent</th>
         <th>Crew Positions</th>
@@ -48,13 +50,12 @@
       @click="selectGame(game)"
       style="cursor: pointer; background-color: #f9f9f9;" >
         <td>{{ formatSport(game.sport) }}</td>
-        <td>{{ formatDate(game.datetime) }}</td>
+        <td>{{ game.date }}</td>
+        <td>{{ game.time }}</td>    
         <td>{{ game.venue }}</td>
         <td>{{ game.opponent }}</td>
-        <td>
-          <ul>
-            <li v-for="role in game.crew" :key="role">{{ role }}</li>
-          </ul>
+        <td @click.stop="selectGame(game)" style="text-decoration: underline; color: purple;">
+          {{ game.crewPositions ? game.crewPositions.length : 0 }} Crew Needed
         </td>
       </tr>
     </tbody>
@@ -81,7 +82,7 @@ selectedGame.value = game;
 
 onMounted(async () => {
 try {
-  const response = await axios.get('http://localhost:8080/api/schedule')
+ const response = await axios.get('http://localhost:8080/api/games')
   if (Array.isArray(response.data) && response.data.length > 0) {
     gameSchedule.value = response.data
     gameScheduleAvailable.value = true
