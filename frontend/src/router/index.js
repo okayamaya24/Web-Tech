@@ -2,19 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/',
-    redirect: '/register'
-  },
-  {
   path: '/register',
   name: 'RegisterCrewMember',
   component: () => import('../components/RegisterCrewMember.vue'),
   props: route => ({ token: route.query.token })
 },
 
-  { path: '/view-profile/:email?',
+  { path: '/profile/:email?',
     name: 'viewCrewProfile', 
-    component: () => import('../components/ViewCrewProfile.vue'),
+    component: () => import('@/view/ViewCrewProfile.vue'),
     props: true
   },
 
@@ -45,7 +41,7 @@ const routes = [
     component: () => import('../components/GameForm.vue')
   },
   {
-    path: '/home',
+    path: '/',
     name: 'home',
     component: () => import('../components/Home.vue'),
   },
