@@ -1,86 +1,86 @@
 <template>
-  <div class="manage-crew">
-    <h1>Manage Crew Members</h1>
+  <div class="admin-crew-list">
+    <h1>View Crew Members</h1>
 
-    <div v-if="crewMembers.length > 0" class="crew-list">
-      <div v-for="(member, index) in crewMembers" :key="index" class="crew-card">
-        <p><strong>Name:</strong> {{ member.firstName }} {{ member.lastName }}</p>
-        <p><strong>Email:</strong> {{ member.email }}</p>
-        <p><strong>Role:</strong> {{ member.role }}</p>
-        <button @click="deleteCrewMember(index)">Delete</button>
-      </div>
-    </div>
+    <table v-if="crewMembers.length">
+      <thead>
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Phone Number</th>
+          <th>Role</th>
+          <th>Qualified Position</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="member in crewMembers" :key="member.id">
+          <td>{{ member.firstName }}</td>
+          <td>{{ member.lastName }}</td>
+          <td>{{ member.email }}</td>
+          <td>{{ member.phoneNumber }}</td>
+          <td>{{ member.role }}</td>
+          <td>{{ member.qualifiedPosition }}</td>
+        </tr>
+      </tbody>
+    </table>
 
-    <div v-else class="empty-message">
-      <p>No crew members available.</p>
+    <div v-else>
+      No crew members found.
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import axios from 'axios'
 
-// Fake crew member data for now
-const crewMembers = ref([
-  { firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', role: 'Sport Broadcaster' },
-  { firstName: 'Jane', lastName: 'Smith', email: 'jane.smith@example.com', role: 'Paid Freelancer' },
-])
+const crewMembers = ref([])
 
-function deleteCrewMember(index) {
-  if (confirm('Are you sure you want to delete this crew member?')) {
-    crewMembers.value.splice(index, 1)
+const fetchCrewMembers = async () => {
+  try {
+    const response = await axios.get('http://localhost:8080/api/crew-members')
+    crewMembers.value = response.data
+    console.log('Fetched Crew Members:', crewMembers.value) 
+  } catch (error) {
+    console.error('Error fetching crew members:', error)
   }
 }
+
+onMounted(fetchCrewMembers)
 </script>
 
 <style scoped>
-.manage-crew {
-  max-width: 800px;
-  margin: 2rem auto;
+.admin-crew-list {
   padding: 2rem;
-  background-color: #faf7fc;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  margin: 0 auto;
+  background-color: #fafafa;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-.crew-list {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.crew-card {
-  background-color: #fff;
-  border: 1px solid #ccc;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: white;
   border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
   padding: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  text-align: left;
+  border-bottom: 1px solid #ddd;
 }
 
-.crew-card p {
-  margin: 0.5rem 0;
-}
-
-button {
-  margin-top: 0.5rem;
-  background-color: #e63946;
+thead {
+  background-color: #4D1979;
   color: white;
-  border: none;
-  padding: 0.6rem 1rem;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #b71c1c;
-}
-
-.empty-message {
-  text-align: center;
-  margin-top: 2rem;
-  font-size: 1.2rem;
-  color: #777;
+tbody tr:hover {
+  background-color: #f2f2f2;
 }
 </style>
