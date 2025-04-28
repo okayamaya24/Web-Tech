@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '/register',
+    path: '/',
     name: 'RegisterCrewMember',
     component: () => import('@/components/RegisterCrewMember.vue')
   },
@@ -25,7 +25,7 @@ const routes = [
     ]
   },
   {
-    path: '/',
+    path: '/crew',
     component: () => import('@/components/CrewDashboard.vue'), // Crew
     children: [
       { path: '', name: 'home', component: () => import('@/components/Home.vue') },
@@ -34,6 +34,10 @@ const routes = [
       { path: 'availability', name: 'availability', component: () => import('@/components/AvailabilityForm.vue') },
       { path: 'profile/:email', name: 'viewCrewProfile', component: () => import('@/views/ViewCrewProfile.vue') }
     ]
+  },
+  { 
+    path: '/', 
+    redirect: '/register' 
   }
 ]
 
