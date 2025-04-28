@@ -1,133 +1,129 @@
 <template>
-  <div>
+  <div class="availability">
     <h1>Submit Availability</h1>
 
-    <div v-if="loading">
-      Loading games...
-    </div>
-
-    <div v-else-if="unsubmittedGames.length > 0">
-      <div v-for="game in unsubmittedGames" :key="game.id">
-        <h2>{{ game.sport }} vs {{ game.opponent }} ({{ formatDate(game.gameDate) }})</h2>
-
-        <form @submit.prevent="submitAvailability(game.id)">
-          <div>
-            <label>Available:</label>
-            <select v-model="formData[game.id].available" required>
-              <option value="">Select availability</option>
-              <option :value="true">Yes</option>
-              <option :value="false">No</option>
-            </select>
-          </div>
-
-          <div>
-            <label >Comment (Optional):</label>
-            <textarea v-model="formData[game.id].comment" rows="3" placeholder="Any notes..."></textarea>
-          </div>
-
-          <button type="submit">
-            Submit Availability
-          </button>
-        </form>
-      </div>
-    </div>
+    <div v-if="loading">Loading games...</div>
 
     <div v-else>
-      You have submitted availability for all games. 🎉
+      <table>
+        <thead>
+          <tr>
+            <th>Sport</th>
+            <th>Game Date</th>
+            <th>Game Time</th>
+            <th>Venue</th>
+            <th>Opponent</th>
+            <th>Available?</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(game, index) in games" :key="game.id">
+            <td>{{ game.sport }}</td>
+            <td>{{ formatDate(game.date) }}</td>
+            <td>{{ game.time }}</td>
+            <td>{{ game.venue }}</td>
+            <td>{{ game.opponent }}</td>
+            <td>
+              <select v-model="formData[game.id].available" required>
+                <option value="">Select</option>
+                <option :value="true">Yes</option>
+                <option :value="false">No</option>
+              </select>
+            </td>
+            <td>
+              <input
+                type="text"
+                v-model="formData[game.id].comment"
+                placeholder="Optional comment"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top: 2rem; text-align: center;">
+        <button @click="submitAllAvailability">Submit Availability</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const games = ref([]);
-const submittedAvailability = ref([]);
 const formData = ref({});
-const loading = ref(true); // <-- new
+const loading = ref(true);
 
 const fetchGames = async () => {
   try {
-    const response = await fetch('/api/schedule');
+    const response = await fetch('http://localhost:8080/api/games');
     const data = await response.json();
     games.value = data;
 
-    const availabilityResponse = await fetch('/api/availability');
-    const availabilityData = await availabilityResponse.json();
-    submittedAvailability.value = availabilityData.map(item => item.gameId);
-
-    games.value.forEach(game => {
-      if (!submittedAvailability.value.includes(game.id)) {
-        formData.value[game.id] = {
-          available: '',
-          comment: ''
-        };
-      }
+    // Initialize formData for each game
+    data.forEach((game) => {
+      formData.value[game.id] = {
+        available: '',
+        comment: ''
+      };
     });
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error fetching games:', error);
   } finally {
-    loading.value = false; // <-- when fetching is done
+    loading.value = false;
   }
 };
 
 const formatDate = (dateStr) => {
+  if (!dateStr) return '';
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
   return new Date(dateStr).toLocaleDateString(undefined, options);
 };
 
-onMounted(fetchGames);
-
-const unsubmittedGames = computed(() => {
-  return games.value.filter(game => !submittedAvailability.value.includes(game.id));
-});
-
-const submitAvailability = async (gameId) => {
+const submitAllAvailability = async () => {
   try {
-    const payload = {
-      available: formData.value[gameId].available,
-      comment: formData.value[gameId].comment
-    };
+    const userEmail = localStorage.getItem('userEmail');
+    if (!userEmail) {
+      alert('Please log in first!');
+      return;
+    }
 
-    await fetch(`/api/availability/${gameId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(payload)
-    });
+    // Prepare all filled availability
+    const promises = [];
 
-    await sendNotification(gameId, payload.available, payload.comment);
+    for (const gameId in formData.value) {
+      const entry = formData.value[gameId];
+      if (entry.available !== '') {
+        const payload = {
+          available: entry.available,
+          comment: entry.comment
+        };
+
+        const request = fetch(`http://localhost:8080/api/availability/${gameId}?userEmail=${encodeURIComponent(userEmail)}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        promises.push(request);
+      }
+    }
+
+    await Promise.all(promises);
 
     alert('Availability submitted successfully!');
-    delete formData.value[gameId];
-    games.value = games.value.filter(game => game.id !== gameId);
+    window.location.reload(); // Refresh to clear form
   } catch (error) {
     console.error('Error submitting availability:', error);
-    alert('Failed to submit availability.');
+    alert('Something went wrong.');
   }
 };
 
-const sendNotification = async (gameId, available, comment) => {
-  try {
-    await fetch('/api/notifications', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        gameId,
-        available,
-        comment,
-        message: `New availability submitted for Game ID: ${gameId}. Available: ${available ? 'Yes' : 'No'}. Comment: ${comment || 'None'}`
-      })
-    });
-  } catch (error) {
-    console.error('Error sending notification:', error);
-  }
-};
+onMounted(fetchGames);
 </script>
-
+ 
 <style scoped>
 div {
 padding: 2rem;
@@ -167,20 +163,21 @@ font-weight: bold;
 color: #555;
 }
 
-select, textarea {
-padding: 0.75rem;
-border: 1px solid #ccc;
-border-radius: 8px;
-font-size: 1rem;
-width: 100%;
-background-color: #fff;
-transition: border-color 0.3s, box-shadow 0.3s;
+select, textarea, input[type="text"] {
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 95%; /* 🔥 wider now */
+  background-color: #fff;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-select:focus, textarea:focus {
-border-color: #4D1979;
-box-shadow: 0 0 8px rgba(123, 0, 255, 0.3);
-outline: none;
+select:focus, textarea:focus, input[type="text"]:focus {
+  border-color: #4D1979;
+  box-shadow: 0 0 8px rgba(123, 0, 255, 0.3);
+  outline: none;
+
 }
 
 button {
