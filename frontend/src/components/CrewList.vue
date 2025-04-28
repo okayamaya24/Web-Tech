@@ -69,7 +69,7 @@ const fetchGames = async () => {
   }
 };
 
-const selectGame = () async => {
+const selectGame = async () => {
   selectedGame.value = games.value.find(game => game.id === selectedGameId.value);
 
   if (selectedGame.value) {
