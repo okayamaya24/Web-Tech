@@ -22,7 +22,10 @@ public class CrewMemberController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<CrewMemberDto> registerCrewMember(@RequestBody CrewMemberDto crewMemberDto) {
+    public ResponseEntity<?> registerCrewMember(@RequestBody CrewMemberDto crewMemberDto) {
+        if ("admin@example.com".equalsIgnoreCase(crewMemberDto.getEmail())) {
+            return ResponseEntity.badRequest().body("Cannot register admin through registration page.");
+        }
         CrewMemberDto savedCrewMember = crewMemberService.registerCrewMember(crewMemberDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedCrewMember);
     }
