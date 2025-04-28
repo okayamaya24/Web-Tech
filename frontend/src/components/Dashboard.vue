@@ -1,123 +1,122 @@
 <template>
-  <div class="dashboard-layout">
-      <nav>
-      <router-link 
-      v-for="link in navLinks"
-      :key="link.name"
-      :to="{name: link.name}">
-          {{ link.label }}
-      </router-link>
-      <!-- Profile Icon -->
-    <span class="profile-icon" @click="goToProfile">
-      <i class="fas fa-user-circle"></i>
-    </span>
-  </nav>
-      <router-view></router-view>
-  </div>
-</template>
-
-<script setup>
-import { computed } from 'vue'
-import { defineProps } from 'vue'
-import { useRouter } from 'vue-router'
-
-  const router = useRouter()
-
-const props = defineProps({
-userRole: {
-  type: String,
-  required: true,
-},
-})
-
-const navLinks = computed(() => {
-if (props.userRole === 'admin') {
-  return [
-    //admin dashboard
-    { name: 'AdminView', label: 'Admin Home' },
-    { name: 'inviteCrewMember', label: 'Invite Crew Member'},
-    { name: 'createGameSchedule', label: 'Create Game Schedule' },
-    { name: 'manageGameSchedule', label: 'Adds New Games to Game Schedule'},
-    { name: 'deleteCrew', label: 'Delete Crew Members'},
-    { name: 'scheduleCrew', label: 'Schedule Crew' },
-    { name: 'viewCrew', label: 'View Crew Members'}
-  ]
-} else {
-  // crew member dashboard
-  return [
-    { name: 'home', label: 'Home' },
-    { name: 'viewGameSchedule', label: 'View Game Schedule' },
-    { name: 'crew', label: 'View Crew List' },
-    { name: 'availability', label: 'Availability' },
-    { name: 'viewCrewProfile', label: 'View Crew Profiles'}
-  ]
-}
-})
-
-function goToProfile() {
-  const email = localStorage.getItem('userEmail');
+    <div class="dashboard-layout">
+        <nav>
+  <router-link
+    v-for="link in navLinks"
+    :key="link.name"
+    :to="{ name: link.name }"
+    class="nav-link"
+    active-class="active-link"
+    exact-active-class="active-link"
+  >
+    {{ link.label }}
+  </router-link>
+</nav>
+        <router-view></router-view>
+    </div>
+  </template>
   
-  // If the user is logged in, navigate to their profile page
-  if (email) {
-    router.push({ name: 'viewCrewProfile', params: { email: email } });
+  <script setup>
+  import { computed } from 'vue'
+  import { useRouter } from 'vue-router'
+  
+    const router = useRouter()
+  
+  const props = defineProps({
+  userRole: {
+    type: String,
+    required: true,
+  },
+  })
+  
+  const navLinks = computed(() => {
+  if (props.userRole === 'admin') {
+    return [
+      //admin dashboard
+      { name: 'AdminView', label: 'Admin Home' },
+      { name: 'inviteCrewMember', label: 'Invite Crew Member'},
+      { name: 'createGameSchedule', label: 'Create Game Schedule' },
+      { name: 'manageGameSchedule', label: 'Adds New Games to Game Schedule'},
+      { name: 'deleteCrew', label: 'Delete Crew Members'},
+      { name: 'scheduleCrew', label: 'Schedule Crew' },
+      { name: 'viewCrew', label: 'View Crew Members'}
+    ]
   } else {
-    // Handle case if the user is not logged in
-    alert('You need to log in first');
-    router.push('/login');
+    // crew member dashboard
+    return [
+      { name: 'home', label: 'Home' },
+      { name: 'viewGameSchedule', label: 'View Game Schedule' },
+      { name: 'crew', label: 'View Crew List' },
+      { name: 'availability', label: 'Availability' },
+      { name: 'viewCrewProfile', label: 'View Crew Profiles'}
+    ]
   }
-}
-</script>
-
-<style scoped>
-
-.dashboard-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  })
   
-}
-
-nav {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 1.5rem;
-      background-color: #4D1979;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-
-      .router-link-active {
-          background-color: white;
-          color: black;
-          border-color: black;
-          border-radius: 6px;
-          box-shadow: 0 6px 12px rgba(0, 0,0, 0.2);
-          transform: translateY(-2px);
-      }
+  function goToProfile() {
+    const email = localStorage.getItem('userEmail');
+    
+    // If the user is logged in, navigate to their profile page
+    if (email) {
+      router.push({ name: 'viewCrewProfile', params: { email: email } });
+    } else {
+      // Handle case if the user is not logged in
+      alert('You need to log in first');
+      router.push('/login');
+    }
   }
-
-nav a {
-text-decoration: none;
-color: #ffffff;
-font-weight: 500;
-transition: color 0.3s ease;
-}
-
-  .router-link-active {
-background-color: white;
-color: black;
-border-color: black;
-border-radius: 6px;
-box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-transform: translateY(-2px);
-}
-
-.profile-icon {
-color: white;
-font-size: 1.5rem;
-cursor: pointer;
-margin-left: auto;
-display: flex;
-align-items: center;
-}
-</style>
+  </script>
+  
+  <style scoped>
+  
+  .dashboard-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    
+  }
+  
+  nav {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        padding: 1.5rem;
+        background-color: #4D1979;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  
+        .router-link-active {
+            background-color: white;
+            color: black;
+            border-color: black;
+            border-radius: 6px;
+            box-shadow: 0 6px 12px rgba(0, 0,0, 0.2);
+            transform: translateY(-2px);
+        }
+    }
+  
+  nav a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  transition: color 0.3s ease;
+  }
+  
+    .router-link-active {
+  background-color: white;
+  color: black;
+  border-color: black;
+  border-radius: 6px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  }
+  
+  .profile-icon {
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  }
+  </style>
