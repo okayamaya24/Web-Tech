@@ -7,7 +7,7 @@
       <select v-model="selectedGameId" @change="selectGame">
         <option value="" disabled>Select a game</option>
         <option v-for="game in games" :key="game.id" :value="game.id">
-          {{ game.sport }} vs {{ game.opponent }} ({{ formatDate(game.gameDate) }})
+         {{ game.sport }} vs {{ game.opponent }} ({{ formatDate(game.date) }})
         </option>
       </select>
     </div>
