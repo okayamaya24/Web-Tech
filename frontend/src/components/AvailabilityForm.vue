@@ -2,7 +2,11 @@
   <div>
     <h1>Submit Availability</h1>
 
-    <div v-if="unsubmittedGames.length > 0">
+    <div v-if="loading">
+      Loading games...
+    </div>
+
+    <div v-else-if="unsubmittedGames.length > 0">
       <div v-for="game in unsubmittedGames" :key="game.id">
         <h2>{{ game.sport }} vs {{ game.opponent }} ({{ formatDate(game.gameDate) }})</h2>
 
@@ -40,6 +44,7 @@ import { ref, onMounted, computed } from 'vue';
 const games = ref([]);
 const submittedAvailability = ref([]);
 const formData = ref({});
+const loading = ref(true); // <-- new
 
 const fetchGames = async () => {
   try {
@@ -47,12 +52,10 @@ const fetchGames = async () => {
     const data = await response.json();
     games.value = data;
 
-
     const availabilityResponse = await fetch('/api/availability');
     const availabilityData = await availabilityResponse.json();
     submittedAvailability.value = availabilityData.map(item => item.gameId);
 
-    
     games.value.forEach(game => {
       if (!submittedAvailability.value.includes(game.id)) {
         formData.value[game.id] = {
@@ -63,9 +66,10 @@ const fetchGames = async () => {
     });
   } catch (error) {
     console.error('Error fetching data:', error);
+  } finally {
+    loading.value = false; // <-- when fetching is done
   }
 };
-
 
 const formatDate = (dateStr) => {
   const options = { year: 'numeric', month: 'short', day: 'numeric' };
@@ -79,49 +83,48 @@ const unsubmittedGames = computed(() => {
 });
 
 const submitAvailability = async (gameId) => {
-try {
-  const payload = {
-    available: formData.value[gameId].available,
-    comment: formData.value[gameId].comment
-  };
+  try {
+    const payload = {
+      available: formData.value[gameId].available,
+      comment: formData.value[gameId].comment
+    };
 
-  await fetch(`/api/availability/${gameId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+    await fetch(`/api/availability/${gameId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
 
-  await sendNotification(gameId, payload.available, payload.comment);
+    await sendNotification(gameId, payload.available, payload.comment);
 
-  alert('Availability submitted successfully!');
-  delete formData.value[gameId];
-  games.value = games.value.filter(game => game.id !== gameId);
-
-} catch (error) {
-  console.error('Error submitting availability:', error);
-  alert('Failed to submit availability.');
-}
+    alert('Availability submitted successfully!');
+    delete formData.value[gameId];
+    games.value = games.value.filter(game => game.id !== gameId);
+  } catch (error) {
+    console.error('Error submitting availability:', error);
+    alert('Failed to submit availability.');
+  }
 };
 
 const sendNotification = async (gameId, available, comment) => {
-try {
-  await fetch('/api/notifications', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      gameId,
-      available,
-      comment,
-      message: `New availability submitted for Game ID: ${gameId}. Available: ${available ? 'Yes' : 'No'}. Comment: ${comment || 'None'}`
-    })
-  });
-} catch (error) {
-  console.error('Error sending notification:', error);
-}
+  try {
+    await fetch('/api/notifications', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        gameId,
+        available,
+        comment,
+        message: `New availability submitted for Game ID: ${gameId}. Available: ${available ? 'Yes' : 'No'}. Comment: ${comment || 'None'}`
+      })
+    });
+  } catch (error) {
+    console.error('Error sending notification:', error);
+  }
 };
 </script>
 
