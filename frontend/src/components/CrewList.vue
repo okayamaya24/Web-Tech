@@ -7,7 +7,7 @@
       <select v-model="selectedGameId" @change="selectGame">
         <option value="" disabled>Select a game</option>
         <option v-for="game in games" :key="game.id" :value="game.id">
-         {{ game.sport }} vs {{ game.opponent }} ({{ formatDate(game.date) }})
+          {{ game.sport }} vs {{ game.opponent }} ({{ formatDate(game.date) }})
         </option>
       </select>
     </div>
@@ -69,7 +69,7 @@ const fetchGames = async () => {
   }
 };
 
-const selectGame = async () => {
+const selectGame = async ()  => {
   selectedGame.value = games.value.find(game => game.id === selectedGameId.value);
 
   if (selectedGame.value) {
