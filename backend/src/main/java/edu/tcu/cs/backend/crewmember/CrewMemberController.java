@@ -2,7 +2,10 @@ package edu.tcu.cs.backend.crewmember;
 
 import edu.tcu.cs.backend.crewmember.dto.CrewMemberRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/crew-members")
@@ -10,23 +13,28 @@ import org.springframework.web.bind.annotation.*;
 public class CrewMemberController {
 
     private final CrewMemberService crewMemberService;
+    private final CrewMemberRepository crewMemberRepository;
 
     @Autowired
-    public CrewMemberController(CrewMemberService crewMemberService) {
+    public CrewMemberController(CrewMemberService crewMemberService, CrewMemberRepository crewMemberRepository) {
         this.crewMemberService = crewMemberService;
+        this.crewMemberRepository = crewMemberRepository;
     }
 
-    @PostMapping("/register") // <--- ADD /register here
-    public CrewMember registerCrewMember(@RequestBody CrewMemberRequestDTO crewMemberRequestDTO) {
-        return crewMemberService.createCrewMember(crewMemberRequestDTO);
+    @PostMapping("/register")
+    public ResponseEntity<CrewMemberDto> registerCrewMember(@RequestBody CrewMemberDto crewMemberDto) {
+        CrewMemberDto savedCrewMember = crewMemberService.registerCrewMember(crewMemberDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCrewMember);
     }
+
     @GetMapping("/{email}")
-    public CrewMember viewCrewMemberProfile(@PathVariable String email) {
-        return crewMemberService.getCrewMemberByEmail(email);
+    public ResponseEntity<CrewMemberDto> getCrewMemberByEmail(@PathVariable String email) {
+        CrewMemberDto crewMemberDto = crewMemberService.findByEmail(email);
+        return ResponseEntity.ok(crewMemberDto);
     }
 
-    @PutMapping("/{email}")
-    public CrewMember updateCrewMemberProfile(@PathVariable String email, @RequestBody CrewMember updatedCrewMember) {
-        return crewMemberService.updateCrewMember(email, updatedCrewMember);
+    @GetMapping
+    public List<CrewMember> getAllCrewMembers() {
+        return crewMemberRepository.findAll();
     }
 }
