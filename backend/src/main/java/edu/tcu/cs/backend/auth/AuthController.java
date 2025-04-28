@@ -2,30 +2,38 @@ package edu.tcu.cs.backend.auth;
 
 import edu.tcu.cs.backend.crewmember.CrewMember;
 import edu.tcu.cs.backend.crewmember.CrewMemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final CrewMemberRepository crewMemberRepository;
 
-    @Autowired
     public AuthController(CrewMemberRepository crewMemberRepository) {
         this.crewMemberRepository = crewMemberRepository;
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-        CrewMember user = crewMemberRepository.findByEmail(request.getEmail())
-                .orElse(null);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+        CrewMember crewMember = crewMemberRepository.findByEmail(loginRequest.getEmail())
+                .orElseThrow(() -> new RuntimeException("Invalid email."));
 
-        if (user != null && user.getPassword().equals(request.getPassword())) {
-            return ResponseEntity.ok(new LoginResponse(user.getEmail(), user.getRole()));
+        if (crewMember.getPassword() == null || !crewMember.getPassword().equals(loginRequest.getPassword())) {
+            throw new RuntimeException("Invalid password.");
         }
 
-        return ResponseEntity.status(401).body("Invalid credentials");
+        // Decide the role based on email
+        String role;
+        if ("admin@example.com".equalsIgnoreCase(crewMember.getEmail())) {
+            role = "admin";
+        } else {
+            role = "crewMember";
+        }
+
+        return ResponseEntity.ok(new LoginResponse(crewMember.getEmail(), role));
     }
 }
+
