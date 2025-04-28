@@ -47,9 +47,9 @@
       const role = localStorage.getItem('userRole')
   
       if (role === 'admin') {
-        router.push('/admin') // 👈 Admin Dashboard page
+        router.push('/admin') // Admin Dashboard page
       } else {
-        router.push('/home') // 👈 Crew Member Home page
+        router.push('/crew') //Crew Member Home page
       }
   
     } catch (error) {
