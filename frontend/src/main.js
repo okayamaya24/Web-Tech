@@ -8,5 +8,6 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 //import App from './components/Dashboard.vue'
 //import App from './components/RegisterCrewMember.vue'
 //import App from './components/CrewAssignment.vue'
+//import App from './components/CrewDashboard.vue'
 
 createApp(App).use(router).mount('#app')
