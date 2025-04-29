@@ -58,7 +58,7 @@ const loading = ref(true);
 
 const fetchGames = async () => {
   try {
-   const request = fetch(`http://localhost:8080/api/availability/${gameId}?userEmail=${encodeURIComponent(userEmail)}`, { ... })
+   const request = fetch(`https://frogcrew-backend-2025-emasdvebbbgkbpfy.eastus-01.azurewebsites.net/api/availability/${gameId}?userEmail=${encodeURIComponent(userEmail)}`, {
     const data = await response.json();
     games.value = data;
 
