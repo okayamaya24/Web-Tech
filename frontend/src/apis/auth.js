@@ -3,9 +3,13 @@ import { ref } from 'vue'
 
 const isAuthenticated = ref(false)
 
+const BASE_URL = import.meta.env.PROD
+  ? 'https://frogcrew-backend25-gngkgsbfgpaehgba.eastus-01.azurewebsites.net/api'
+  : 'http://localhost:8080/api';
+
 const login = async (email, password) => {
   try {
-    const response = await axios.post('http://localhost:8080/api/auth/login', {
+    const response = await axios.post(`${BASE_URL}/auth/login`, {
       email: email,
       password: password
     });
