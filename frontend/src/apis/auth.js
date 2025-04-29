@@ -5,7 +5,7 @@ const isAuthenticated = ref(false)
 
 const login = async (email, password) => {
   try {
-    const response = await axios.post('http://localhost:8080/api/auth/login', {
+    const response = await axios.post('https://frogcrew-backend-2025.azurewebsites.net/api/auth/login', { 
       email: email,
       password: password
     });
