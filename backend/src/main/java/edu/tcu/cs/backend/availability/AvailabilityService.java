@@ -1,9 +1,5 @@
 package edu.tcu.cs.backend.availability;
 
-<<<<<<< HEAD
-import edu.tcu.cs.backend.availability.AvailabilityRequestDTO;
-=======
->>>>>>> 41924f4fafb0dcdcb70dd934d28fe7d7230dab25
 import edu.tcu.cs.backend.game.Game;
 import edu.tcu.cs.backend.game.GameRepository;
 import edu.tcu.cs.backend.crewmember.CrewMember;
@@ -28,14 +24,12 @@ public class AvailabilityService {
     }
 
     public void submitAvailability(Long gameId, String userEmail, AvailabilityRequestDTO request) {
-        // Confirm that crew member and game actually exist
         CrewMember crewMember = crewMemberRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("Crew member not found"));
 
         Game game = gameRepository.findById(gameId)
                 .orElseThrow(() -> new RuntimeException("Game not found"));
 
-        // Create a new Availability entry
         Availability availability = new Availability();
         availability.setCrewMemberEmail(crewMember.getEmail());
         availability.setGameId(game.getId());
@@ -44,8 +38,4 @@ public class AvailabilityService {
 
         availabilityRepository.save(availability);
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 41924f4fafb0dcdcb70dd934d28fe7d7230dab25
