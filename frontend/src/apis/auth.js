@@ -1,4 +1,4 @@
-import axios from @/apis/axios;
+import axios from '@/apis/axios';
 import { ref } from 'vue';
 
 const isAuthenticated = ref(false);
