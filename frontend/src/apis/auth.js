@@ -1,7 +1,7 @@
-import axios from 'axios'
-import { ref } from 'vue'
+import axios from @/apis/axios;
+import { ref } from 'vue';
 
-const isAuthenticated = ref(false)
+const isAuthenticated = ref(false);
 
 const login = async (email, password) => {
   try {
