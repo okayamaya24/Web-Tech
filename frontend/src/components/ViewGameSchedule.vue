@@ -214,7 +214,7 @@ if (validGames.length === 0) {
 }
 
 
-fetch('/api/schedule', {
+fetch('https://frogcrew-backend-2025.azurewebsites.net/api/schedule', {
 method: 'POST',
 headers: {
   'Content-Type': 'application/json'
