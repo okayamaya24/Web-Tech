@@ -62,7 +62,7 @@ const selectedGame = ref(null);
 
 const fetchGames = async () => {
   try {
-   const response = await axios.get('http://localhost:8080/api/games');
+   const response = await axios.get('https://frogcrew-backend-2025.azurewebsites.net/api/games');
     games.value = response.data;
   } catch (error) {
     console.error('Error fetching games:', error);
@@ -74,7 +74,7 @@ const selectGame = async ()  => {
 
   if (selectedGame.value) {
     try {
-      const response = await axios.get(`http://localhost:8080/api/crew-assignments/game/${selectedGameId.value}`);
+      const response = await axios.get(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/game/${selectedGameId.value}`);
       crewAssignments.value = response.data;
     } catch (error) {
       console.error('Error fetching crew assignments:', error);
