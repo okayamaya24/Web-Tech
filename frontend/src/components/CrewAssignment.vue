@@ -1,48 +1,47 @@
 <template>
-    <div class="crew-assignment">
-      <h1>Schedule Crew</h1>
-  
-      <div v-if="games.length">
-        <label>Select a Game:</label>
-        <select v-model="selectedGameId">
-          <option disabled value="">Select a game</option>
-          <option v-for="game in games" :key="game.id" :value="game.id">
-            {{ game.sport }} vs {{ game.opponent }} ({{ formatDate(game.gameDate) }})
+  <div class="crew-assignment">
+    <h1>Schedule Crew</h1>
+
+    <div v-if="games.length">
+      <label>Select a Game:</label>
+      <select v-model="selectedGameId">
+        <option disabled value="">Select a game</option>
+        <option v-for="game in games" :key="game.id" :value="game.id">
+          {{ game.sport }} vs {{ game.opponent }} ({{ formatDate(game.gameDate) }})
+        </option>
+      </select>
+    </div>
+
+    <div v-if="selectedGame">
+      <h2>Assign Crew for {{ selectedGame.sport }} vs {{ selectedGame.opponent }}</h2>
+
+      <div v-for="position in crewPositions" :key="position">
+        <label>{{ position }}:</label>
+        <select v-model="assignments[position]">
+          <option disabled value="">Select crew member</option>
+          <option v-for="member in availableCrew" :key="member.id" :value="member.id">
+            {{ member.name }} ({{ member.qualifications.join(', ') }})
           </option>
         </select>
       </div>
 
-      <div v-if="selectedGame">
-        <h2>Assign Crew for {{ selectedGame.sport }} vs {{ selectedGame.opponent }}</h2>
-  
-        <div v-for="position in crewPositions" :key="position">
-          <label>{{ position }}:</label>
-          <select v-model="assignments[position]">
-            <option disabled value="">Select crew member</option>
-            <option v-for="member in availableCrew" :key="member.id" :value="member.id">
-              {{ member.name }} ({{ member.qualifications.join(', ') }})
-            </option>
-          </select>
-        </div>
-  
-        <div class="actions">
-          <button @click="saveDraft">Save Draft</button>
-          <button @click="finalizeAssignments">Finalize Assignments</button>
-        </div>
-  
-        <div v-if="validationErrors.length">
-          <ul>
-            <li v-for="(error, index) in validationErrors" :key="index" class="error">{{ error }}</li>
-          </ul>
-        </div>
+      <div class="actions">
+        <button @click="saveDraft">Save Draft</button>
+        <button @click="finalizeAssignments">Finalize Assignments</button>
       </div>
 
-      <div v-else>
+      <div v-if="validationErrors.length">
+        <ul>
+          <li v-for="(error, index) in validationErrors" :key="index" class="error">{{ error }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <div v-else>
       No games available to schedule crews. 🎉
     </div>
-  
-    </div>
-  </template>
+  </div>
+</template>
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
@@ -54,15 +53,14 @@ const assignments = ref({});
 const availableCrew = ref([]);
 const validationErrors = ref([]);
 
-
 const fetchGames = async () => {
-  const response = await fetch('https://frogcrew-backend-2025.azurewebsites.net/api/schedule')
+  const response = await fetch('https://frogcrew-backend-2025.azurewebsites.net/api/games');
   const data = await response.json();
   games.value = data;
 };
 
 const fetchAvailableCrew = async (gameId) => {
-  const response = await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/available-crew/${gameId}`)
+  const response = await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/available-crew/${gameId}`);
   const data = await response.json();
   availableCrew.value = data;
 };
@@ -80,18 +78,17 @@ watch(selectedGameId, (newGameId) => {
 
 const saveDraft = async () => {
   try {
-    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/finalize/${selectedGameId.value}`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(assignments.value)
-});
+    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/draft/${selectedGameId.value}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(assignments.value)
+    });
     alert('Draft saved successfully!');
   } catch (error) {
     console.error('Error saving draft:', error);
     alert('Failed to save draft.');
   }
 };
-
 
 const validateAssignments = () => {
   validationErrors.value = [];
@@ -102,11 +99,8 @@ const validateAssignments = () => {
     }
   }
 
-
-
   return validationErrors.value.length === 0;
 };
-
 
 const finalizeAssignments = async () => {
   if (!validateAssignments()) {
@@ -114,13 +108,13 @@ const finalizeAssignments = async () => {
   }
 
   try {
-    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/finalize/${selectedGameId.value}`)
+    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/finalize/${selectedGameId.value}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(assignments.value)
     });
 
-    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/notifications/crew-assigned/${selectedGameId.value}`)
+    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/notifications/crew-assigned/${selectedGameId.value}`, {
       method: 'POST'
     });
 
@@ -129,6 +123,12 @@ const finalizeAssignments = async () => {
     console.error('Error finalizing assignments:', error);
     alert('Failed to finalize assignments.');
   }
+};
+
+const formatDate = (dateStr) => {
+  const date = new Date(dateStr);
+  if (isNaN(date)) return 'Invalid Date';
+  return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
 };
 
 onMounted(fetchGames);
@@ -156,16 +156,6 @@ h2 {
   margin-bottom: 1rem;
   font-size: 1.5rem;
   color: #333;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 label {
