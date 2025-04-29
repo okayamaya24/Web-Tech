@@ -3,6 +3,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
+    redirect: '/register'
+  },
+  {
+    path: '/register',
     name: 'RegisterCrewMember',
     component: () => import('@/components/RegisterCrewMember.vue')
   },
@@ -43,4 +47,3 @@ const router = createRouter({
 })
 
 export default router
-

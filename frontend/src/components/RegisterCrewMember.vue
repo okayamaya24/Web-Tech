@@ -102,7 +102,7 @@ function editInput() {
   };
 
   try {
-    const response = await axios.post('https://frogcrew-backend-2025.azurewebsites.net/api/crew-members/register', crewMemberData);
+    const response = await axios.post('http://localhost:8080/api/crew-members/register', crewMemberData);
     console.log('Crew member registered:', response.data);
     alert('Registration successful!');
 

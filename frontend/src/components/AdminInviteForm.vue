@@ -101,3 +101,4 @@ function sendInvite() {
   font-weight: 500;
 }
 </style>
+

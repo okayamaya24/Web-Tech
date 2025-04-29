@@ -82,7 +82,7 @@ selectedGame.value = game;
 
 onMounted(async () => {
 try {
- const response = await axios.get('https://frogcrew-backend-2025.azurewebsites.net/api/games')
+ const response = await axios.get('http://localhost:8080/api/games')
   if (Array.isArray(response.data) && response.data.length > 0) {
     gameSchedule.value = response.data
     gameScheduleAvailable.value = true

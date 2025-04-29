@@ -35,13 +35,11 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
-const baseURL = 'https://frogcrew-backend-2025.azurewebsites.net';   
-
 const crewMembers = ref([])
 
 const fetchCrewMembers = async () => {
   try {
-    const response = await axios.get(`${baseURL}/api/crew-members`)
+    const response = await axios.get('http://localhost:8080/api/crew-members')
     crewMembers.value = response.data
     console.log('Fetched Crew Members:', crewMembers.value) 
   } catch (error) {
