@@ -58,7 +58,7 @@ const loading = ref(true);
 
 const fetchGames = async () => {
   try {
-   const request = fetch(`https://frogcrew-backend-2025-emasdvebbbgkbpfy.eastus-01.azurewebsites.net/api/availability/${gameId}?userEmail=${encodeURIComponent(userEmail)}`, {
+    const response = await fetch(`https://frogcrew-backend-2025-emasdvebbbgkbpfy.eastus-01.azurewebsites.net/api/games`);
     const data = await response.json();
     games.value = data;
 
@@ -101,7 +101,7 @@ const submitAllAvailability = async () => {
           comment: entry.comment
         };
 
-        const request = fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/availability/${gameId}?userEmail=${encodeURIComponent(userEmail)}`, { ... })
+        const request = fetch(`https://frogcrew-backend-2025-emasdvebbbgkbpfy.eastus-01.azurewebsites.net/api/availability/${gameId}?userEmail=${encodeURIComponent(userEmail)}`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
