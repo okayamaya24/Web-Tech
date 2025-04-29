@@ -1,6 +1,6 @@
 package edu.tcu.cs.backend.game;
 
-import edu.tcu.cs.backend.game.dto.GameDTO;
+import edu.tcu.cs.backend.game.GameDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +23,7 @@ public class GameService {
                         game.getVenue(),
                         game.getOpponent(),
                         game.getSport(),
-                        game.getCrewPositions() // ✅ ADD THIS MISSING LINE
+                        game.getCrewPositions()
                 ))
                 .collect(Collectors.toList());
     }

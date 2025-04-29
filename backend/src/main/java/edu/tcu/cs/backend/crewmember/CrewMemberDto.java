@@ -1,40 +1,70 @@
 package edu.tcu.cs.backend.crewmember;
 
-import edu.tcu.cs.backend.crewmember.dto.CrewMemberRequestDTO;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
+public class CrewMemberDto {
 
-@RestController
-@RequestMapping("/api/crew-members")
-@CrossOrigin(origins = "http://localhost:5173")
-public class CrewMemberController {
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String phoneNumber;
+    private String password;
+    private String role;
+    private String qualifiedPosition;
 
-    private final CrewMemberService crewMemberService;
-    private final CrewMemberRepository crewMemberRepository;
+    // getters and setters
 
-    @Autowired
-    public CrewMemberController(CrewMemberService crewMemberService, CrewMemberRepository crewMemberRepository) {
-        this.crewMemberService = crewMemberService;
-        this.crewMemberRepository = crewMemberRepository;
+    public String getFirstName() {
+        return firstName;
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<CrewMemberDto> registerCrewMember(@RequestBody CrewMemberDto crewMemberDto) {
-        CrewMemberDto savedCrewMember = crewMemberService.registerCrewMember(crewMemberDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedCrewMember);
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<CrewMemberDto> getCrewMemberByEmail(@PathVariable String email) {
-        CrewMemberDto crewMemberDto = crewMemberService.findByEmail(email);
-        return ResponseEntity.ok(crewMemberDto);
+    public String getLastName() {
+        return lastName;
     }
 
-    @GetMapping
-    public List<CrewMember> getAllCrewMembers() {
-        return crewMemberRepository.findAll();
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getQualifiedPosition() {
+        return qualifiedPosition;
+    }
+
+    public void setQualifiedPosition(String qualifiedPosition) {
+        this.qualifiedPosition = qualifiedPosition;
     }
 }

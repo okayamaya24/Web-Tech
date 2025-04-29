@@ -11,7 +11,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String date;
+    private String date; // 🟰 Date (YYYY-MM-DD)
     private String time;
     private String venue;
     private String opponent;
@@ -24,7 +24,7 @@ public class Game {
 
     public Game() {}
 
-    public Game(String date, String time, String venue, String opponent, String sport, List<String> crewPositions) {
+    public Game(String time,String date, String venue, String opponent, String sport, List<String> crewPositions) {
         this.date = date;
         this.time = time;
         this.venue = venue;

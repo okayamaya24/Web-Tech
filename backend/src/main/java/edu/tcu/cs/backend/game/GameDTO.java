@@ -1,4 +1,4 @@
-package edu.tcu.cs.backend.game.dto;
+package edu.tcu.cs.backend.game;
 
 import java.util.List;
 

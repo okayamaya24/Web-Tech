@@ -8,9 +8,9 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class GameController {
 
-    private final GameRepository gameRepository; // ADD THIS FIELD
+    private final GameRepository gameRepository; // ✅ ADD THIS FIELD
 
-    public GameController(GameRepository gameRepository) { // Constructor injection
+    public GameController(GameRepository gameRepository) { // ✅ Constructor injection
         this.gameRepository = gameRepository;
     }
 
