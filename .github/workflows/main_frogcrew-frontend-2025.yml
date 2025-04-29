@@ -30,10 +30,10 @@ jobs:
           npm install
           npm run build
 
-      - name: Zip frontend build
-        run: |
-          cd frontend/dist
-          zip -r ../../../frontend-build.zip .
+      # - name: Zip frontend build
+      #   run: |
+      #     cd frontend/dist
+      #     zip -r ../../../frontend-build.zip .
 
       - name: Upload frontend build artifact
         uses: actions/upload-artifact@v4
@@ -58,8 +58,8 @@ jobs:
           name: frontend-build
           path: .
 
-      - name: Unzip artifact
-        run: unzip frontend-build.zip
+      # - name: Unzip artifact
+      #   run: unzip frontend-build.zip
 
       - name: Login to Azure
         uses: azure/login@v2
