@@ -31,4 +31,8 @@ public class AvailabilityController {
     public List<Availability> getAllAvailability() {
         return availabilityRepository.findAll();
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 41924f4fafb0dcdcb70dd934d28fe7d7230dab25

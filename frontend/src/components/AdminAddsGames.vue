@@ -156,6 +156,8 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 
+  const baseURL = 'https://frogcrew-backend-2025.azurewebsites.net'; // backend URL
+
 const games = ref([])
 const submitted = ref(false)
 
@@ -176,7 +178,7 @@ return gameList
 })
 
 onMounted(() => {
-fetch('/api/schedule')
+fetch(`${baseURL}/api/schedule`)
   .then(res => res.json())
   .then(data => {
     games.value = data.map(g => ({ ...g, isNew: false })) // mark existing games
@@ -259,7 +261,7 @@ const postData = newGames.map(({ game }) => ({
   crew: game.crew
 }));
 
-fetch('/api/schedule/add', {
+fetch(`${baseURL}/api/schedule/add`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(postData)
@@ -288,7 +290,7 @@ fetch('/api/schedule/add', {
 }
 
 function notifyScheduleUpdate() {
-fetch('/api/notify-schedule-update', {
+fetch(`${baseURL}/api/notify-schedule-update`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ message: 'Schedule has been updated with new games.' })

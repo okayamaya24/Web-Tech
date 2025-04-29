@@ -1,6 +1,9 @@
 package edu.tcu.cs.backend.availability;
 
+<<<<<<< HEAD
 import edu.tcu.cs.backend.availability.AvailabilityRequestDTO;
+=======
+>>>>>>> 41924f4fafb0dcdcb70dd934d28fe7d7230dab25
 import edu.tcu.cs.backend.game.Game;
 import edu.tcu.cs.backend.game.GameRepository;
 import edu.tcu.cs.backend.crewmember.CrewMember;
@@ -41,4 +44,8 @@ public class AvailabilityService {
 
         availabilityRepository.save(availability);
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 41924f4fafb0dcdcb70dd934d28fe7d7230dab25

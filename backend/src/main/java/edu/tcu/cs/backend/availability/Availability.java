@@ -9,11 +9,19 @@ public class Availability {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+<<<<<<< HEAD
     private String crewMemberEmail; // Email of crew member submitting
     private Long gameId; // Game they are submitting for
 
     private boolean available; //  Whether available
     private String comment;     // Optional comment
+=======
+    private String crewMemberEmail; 
+    private Long gameId; 
+
+    private boolean available; 
+    private String comment;    
+>>>>>>> 41924f4fafb0dcdcb70dd934d28fe7d7230dab25
 
     public Availability() {}
 

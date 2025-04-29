@@ -11,6 +11,7 @@
   {{ link.label }}
 </router-link>
   
+        <button class="logout-button" @click="handleLogout">Logout</button>
         <span class="profile-icon" @click="goToProfile">
           <i class="fas fa-user-circle"></i>
         </span>
@@ -27,11 +28,17 @@
   <script setup>
   import { ref, computed, onMounted } from 'vue'
   import { useRouter } from 'vue-router'
+  import { logout } from '@/apis/auth'
   
   const router = useRouter()
   
   const userRole = ref('')
   const roleReady = ref(false)
+
+  const handleLogout = async () => {
+    await logout()
+    router.replace('/login')
+}
   
   onMounted(() => {
     const storedRole = localStorage.getItem('userRole')
@@ -104,4 +111,20 @@
     font-size: 1.5rem;
     color: #777;
   }
+
+  .logout-button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: white;
+  color: #4D1979;
+}
   </style>

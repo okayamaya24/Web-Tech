@@ -10,11 +10,11 @@ public class CrewAssignment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long gameId;           // Link to the game
-    private String position;       // Position assigned (ex: Camera, Director)
-    private String name;           // Crew member name
-    private LocalDateTime reportTime; // When they need to report
-    private String reportLocation; // Where they need to report
+    private Long gameId;           
+    private String position;      
+    private String name;           
+    private LocalDateTime reportTime; 
+    private String reportLocation; 
 
     public CrewAssignment() {}
 
