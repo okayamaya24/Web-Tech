@@ -56,13 +56,13 @@ const validationErrors = ref([]);
 
 
 const fetchGames = async () => {
-  const response = await fetch('/api/schedule');
+  const response = await fetch('https://frogcrew-backend-2025.azurewebsites.net/api/schedule')
   const data = await response.json();
   games.value = data;
 };
 
 const fetchAvailableCrew = async (gameId) => {
-  const response = await fetch(`/api/available-crew/${gameId}`);
+  const response = await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/available-crew/${gameId}`)
   const data = await response.json();
   availableCrew.value = data;
 };
@@ -80,7 +80,7 @@ watch(selectedGameId, (newGameId) => {
 
 const saveDraft = async () => {
   try {
-    await fetch(`/api/crew-assignments/draft/${selectedGameId.value}`, {
+    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/draft/${selectedGameId.value}`)
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(assignments.value)
@@ -114,13 +114,13 @@ const finalizeAssignments = async () => {
   }
 
   try {
-    await fetch(`/api/crew-assignments/finalize/${selectedGameId.value}`, {
+    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/finalize/${selectedGameId.value}`)
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(assignments.value)
     });
 
-    await fetch(`/api/notifications/crew-assigned/${selectedGameId.value}`, {
+    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/notifications/crew-assigned/${selectedGameId.value}`)
       method: 'POST'
     });
 
