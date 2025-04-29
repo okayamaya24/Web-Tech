@@ -62,5 +62,5 @@ jobs:
         with:
           app-name: 'frogcrew-backend-2025'
           slot-name: 'Production'
-         package: 'backend/target/*.jar'
+          package: 'backend/target/*.jar'
           
