@@ -1,3 +1,7 @@
+package edu.tcu.cs.backend.availability;
+
+import edu.tcu.cs.backend.game.Game;
+import edu.tcu.cs.backend.game.GameRepository;
 import edu.tcu.cs.backend.crewmember.CrewMember;
 import edu.tcu.cs.backend.crewmember.CrewMemberRepository;
 import org.springframework.stereotype.Service;
