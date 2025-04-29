@@ -14,7 +14,7 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("https://frogcrew-frontend-2025-cugeexgkdybxfbem.eastus-01.azurewebsites.net")
+                        .allowedOrigins("https://wonderful-stone-0d535ad0f.6.azurestaticapps.net")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
