@@ -80,11 +80,11 @@ watch(selectedGameId, (newGameId) => {
 
 const saveDraft = async () => {
   try {
-    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/draft/${selectedGameId.value}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(assignments.value)
-    });
+    await fetch(`https://frogcrew-backend-2025.azurewebsites.net/api/crew-assignments/finalize/${selectedGameId.value}`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(assignments.value)
+});
     alert('Draft saved successfully!');
   } catch (error) {
     console.error('Error saving draft:', error);
