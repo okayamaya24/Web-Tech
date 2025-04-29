@@ -37,7 +37,7 @@
   
   async function loadCrew() {
     try {
-      const response = await axios.get('http://localhost:8080/api/crew-members');
+      const response = await axios.get('https://your-backend-app-name.azurewebsites.net/api/crew-members');
       crewList.value = response.data;
     } catch (error) {
       console.error('Error fetching crew members:', error);
@@ -50,7 +50,7 @@
     if (!confirmed) return;
   
     try {
-      await axios.delete(`http://localhost:8080/api/crew-members/${id}`);
+     await axios.delete(`https://your-backend-app-name.azurewebsites.net/api/crew-members/${id}`);
       crewList.value = crewList.value.filter(member => member.id !== id);
       alert('Crew member deleted successfully.');
     } catch (error) {
