@@ -1,6 +1,5 @@
 package edu.tcu.cs.backend.availability;
 
-import edu.tcu.cs.backend.availability.AvailabilityRequestDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +30,4 @@ public class AvailabilityController {
     public List<Availability> getAllAvailability() {
         return availabilityRepository.findAll();
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 41924f4fafb0dcdcb70dd934d28fe7d7230dab25
