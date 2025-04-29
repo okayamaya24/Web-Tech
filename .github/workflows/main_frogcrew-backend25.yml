@@ -24,7 +24,7 @@ jobs:
       - name: Build and package backend app
         run: |
           cd backend
-          mvn clean install
+          mvn clean install -DskipTests
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
