@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Install dependencies and build project
+      - name: Install and build frontend
         run: |
           cd frontend
           npm install
@@ -33,7 +33,7 @@ jobs:
       - name: Zip frontend build
         run: |
           cd frontend/dist
-          zip -r ../../../release.zip .
+          zip -r ../../../frontend-build.zip .
 
       - name: Upload frontend build artifact
         uses: actions/upload-artifact@v4
