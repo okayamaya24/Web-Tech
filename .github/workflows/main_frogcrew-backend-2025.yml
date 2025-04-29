@@ -28,6 +28,7 @@ jobs:
         run: |
           cd backend
           mvn clean install -DskipTests
+          cp target/*.jar ../
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -64,5 +65,5 @@ jobs:
         with:
           app-name: 'frogcrew-backend-2025'
           slot-name: 'Production'
-          package: 'target/*.jar'
+          package: '*.jar'
           
