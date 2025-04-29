@@ -34,10 +34,6 @@ const routes = [
       { path: 'availability', name: 'availability', component: () => import('@/components/AvailabilityForm.vue') },
       { path: 'profile/:email', name: 'viewCrewProfile', component: () => import('@/views/ViewCrewProfile.vue') }
     ]
-  },
-  { 
-    path: '/', 
-    redirect: '/register' 
   }
 ]
 
