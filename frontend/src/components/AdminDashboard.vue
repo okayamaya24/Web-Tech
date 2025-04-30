@@ -59,13 +59,19 @@
   })
   
   function goToProfile() {
-    const email = localStorage.getItem('userEmail')
-    if (email) {
-      router.push({ name: 'viewCrewProfile', params: { email } })
-    } else {
-      router.push('/login')
-    }
+  const role = localStorage.getItem('userRole');
+  const email = localStorage.getItem('userEmail');
+
+  if (role === 'crewMember' && email) {
+    router.push({ name: 'viewCrewProfile', params: { email } });
+  } else if (role === 'admin') {
+    // Optional: Show toast or tooltip instead of redirect
+    alert('Admin profiles are not available.');
+  } else {
+    // Just in case fallback
+    alert('Unable to access profile.');
   }
+}
   </script>
   
   <style scoped>

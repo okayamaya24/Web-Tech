@@ -25,7 +25,8 @@ const routes = [
       { path: 'manageGameSchedule', name: 'manageGameSchedule', component: () => import('@/components/AdminAddsGames.vue') },
       { path: 'deleteCrew', name: 'deleteCrew', component: () => import('@/components/AdminDeleteCrew.vue') },
       { path: 'viewCrew', name: 'viewCrew', component: () => import('@/components/AdminCrewList.vue') },
-      { path: 'scheduleCrew', name: 'scheduleCrew', component: () => import('@/components/CrewAssignment.vue') }
+      { path: 'scheduleCrew', name: 'scheduleCrew', component: () => import('@/components/CrewAssignment.vue') },
+      { path: 'profile/:email', name: 'viewCrewProfile', component: () => import('@/views/ViewCrewProfile.vue') }
     ]
   },
   {

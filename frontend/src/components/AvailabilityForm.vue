@@ -15,6 +15,7 @@
             <th>Opponent</th>
             <th>Available?</th>
             <th>Comment</th>
+            <th>Status</th> <!-- New column header -->
           </tr>
         </thead>
         <tbody>
@@ -38,6 +39,8 @@
                 placeholder="Optional comment"
               />
             </td>
+            <td v-if="formData[game.id].submitted" style="color: green;">✔️ Submitted</td>
+            <td v-else style="color: gray;">Not submitted</td> <!-- fallback -->
           </tr>
         </tbody>
       </table>
@@ -66,7 +69,8 @@ const fetchGames = async () => {
     data.forEach((game) => {
       formData.value[game.id] = {
         available: '',
-        comment: ''
+        comment: '',
+        submitted: false  // ✅ Track submission status
       };
     });
   } catch (error) {
@@ -113,8 +117,14 @@ const submitAllAvailability = async () => {
 
     await Promise.all(promises);
 
+    // ✅ Mark each entry as submitted (for UI feedback)
+    for (const gameId in formData.value) {
+      if (formData.value[gameId].available !== '') {
+        formData.value[gameId].submitted = true;
+      }
+    }
+
     alert('Availability submitted successfully!');
-    window.location.reload(); // Refresh to clear form
   } catch (error) {
     console.error('Error submitting availability:', error);
     alert('Something went wrong.');

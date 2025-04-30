@@ -1,406 +1,277 @@
 <template>
   <div class="schedule">
-      <table border="solid">
-          <thead>
-              <tr>
-                  <th>Sport</th>
-                  <th>Game Date and Time</th>
-                  <th>Venue</th>
-                  <th>Opponent (If Applicable)</th>
-                  <th>Required Crew Positions</th>
-              </tr>
-          </thead>
-          <tbody>
-              <tr v-for="(game, index) in games" :key="index">
-                      <template v-if="game?.isNew">
-                          <td v-if="game && game.isNew">
-                          <select name="sports" id="sports" v-model="game.sport" :class=" { invalid: invalidIndices.includes(index) && !game.sport.trim() }">
-                              <option value="">--</option>
-                              <option value="baseball">Baseball</option>
-                              <option value="basketball-men">Basketball, Men's</option>
-                              <option value="basketball-women">Basketball, Women's</option>
-                              <option value="beach-volleyball">Beach Volleyball</option>
-                              <option value="cc-men">Cross Country, Men's</option>
-                              <option value="cc-women">Cross Country, Women's</option>
-                              <option value="equestrian">Equestrian</option>
-                              <option value="football">Football</option>
-                              <option value="golf-men">Golf, Men's</option>
-                              <option value="golf-women">Golf, Women's</option>
-                              <option value="indoor-track-men">Indoor Track and Field, Men's</option>
-                              <option value="indoor-track-women">Indoor Track and Field, Women's</option>
-                              <option value="outdoor-track-men">Outdoor Track and Field, Men's </option>
-                              <option value="outdoor-track-women">Outdoor Track and Field, Women's</option>
-                              <option value="rifle">Rifle</option>
-                              <option value="soccer">Soccer</option>
-                              <option value="swimming-men">Swimming and Diving, Men's</option>
-                              <option value="swimming-women">Swimming and Diving, Women's</option>
-                              <option value="tennis-men">Tennis, Men's</option>
-                              <option value="tennis-women">Tennis, Women's</option>
-                              <option value="triathlon">Triathlon</option>
-                              <option value="volleyball">Volleyball</option>
-                          </select>
-                      </td>
-                      <td>
-                          <input type="datetime-local" v-model="game.datetime" required :class="{ invalid: invalidIndices.includes(index) && !game.datetime }"/>
-                      </td>
-                      <td>
-                          <input type="text" v-model="game.venue" required placeholder="Venue" :class="{ invalid: invalidIndices.includes(index) && !game.venue.trim() }"/>
-                      </td>
-                      <td>
-                          <input type="text" v-model="game.opponent" placeholder="If Not Applicable Enter N/A" required  :class="{ invalid: invalidIndices.includes(index) && !game.venue.trim() }"/>
-                      </td>
-                      <td>
-                          <div :class="{ invalid: invalidIndices.includes(index) && game.crew.length === 0 }" class="crew-checkboxes">
-                            <div class="checkbox-group">
-                        <input type="checkbox" id="assisant-director" name="assistant-director" value="Assistant Director" v-model="game.crew" />
-                      <label for="assistant-director">Assistant Director</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="assistant-producer" name="assistant-producer" value="Assistant Producer" v-model="game.crew"/>
-                    <label for="assistant-producer">Assistant Producer</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="audio-a1" name="audio-a1" value="Audio A1" v-model="game.crew"/>
-                    <label for="audio-a1">Audio, A1</label> 
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="audio-assistant" name="audio-assistant" value="Audio Assistant A2" v-model="game.crew"/>
-                    <label for="audio-assistant">Audio Assistant, A2</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="bug-operator" name="bug-operator" value="Bug Operator" v-model="game.crew"/>
-                    <label for="bug-operator">Bug Operator</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="camera-fixed" name="camera-fixed" value="Camera Fixed" v-model="game.crew"/>
-                    <label for="camera-fixed">Camera Fixed</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="camera-handheld" name="camera-handheld" value="Camera Handheld" v-model="game.crew"/>
-                    <label for="camera-handheld">Camera Handheld</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="camera-steadicam" name="camera-steadicam" value="Camera Steadicam" v-model="game.crew"/>
-                    <label for="camera-steadicam">Camera Steadicam</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="director" name="director" value="Director" v-model="game.crew"/>
-                    <label for="director">Director</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="eic" name="eic" value="Engineer in Charge (EIC)" v-model="game.crew"/>
-                    <label for="eic">Engineer in Charge (EIC)</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="eng2" name="eng2" value="ENG 2" v-model="game.crew"/>
-                    <label for="eng2">ENG 2</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="evs-replay-lead" name="evs-replay-lead" value="EVS Replay Lead" v-model="game.crew"/>
-                    <label for="evs-replay-lead">EVS Replay Lead</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="evs-replay-ro" name="evs-replay-ro" value="EVS Replay R/O" v-model="game.crew"/>
-                    <label for="evs-replay-ro">EVS Replay R/O</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="graphics-operator" name="graphics-operator" value="Graphic Operator" v-model="game.crew"/>
-                    <label for="graphics-operator">Graphics Operator</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="producer" name="producer" value="Producer" v-model="game.crew"/>
-                    <label for="producer">Producer</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="technical-director" name="technical-director" value="Technical Director" v-model="game.crew"/>
-                    <label for="technical-director">Technical Director</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="timeout-coordinator" name="timeout-coordinator" value="Timeout Coordinator" v-model="game.crew"/>
-                    <label for="timeout-coordinator">Timeout Coordinator</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="video-operator" name="video-operator" value="Video Operator" v-model="game.crew"/>
-                    <label for="video-operator">Video Operator</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="sport-broadcaster" name="sport-broadcaster" value="Sport Broadcaster" v-model="game.crew"/>
-                    <label for="sport-broadcaster">Sport Broadcaster</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="paid-freelancer" name="paid-freelancer" value="Paid Freelancer" v-model="game.crew"/>
-                    <label for="paid-freelancer">Paid Freelancer</label>
-                      </div>
-                      <div class="checkbox-group">
-                        <input type="checkbox" id="paid-student" name="paid-student" value="Paid Student" v-model="game.crew"/>
-                    <label for="paid-student">Paid Student</label>
-                      </div>
-                          </div>
-                      </td>
-                      </template>
-                      <template v-else>
-                          <td>{{ game.sport }}</td>
-                          <td>{{ game.datetime }}</td>
-                          <td>{{ game.venue }}</td>
-                          <td>{{ game.opponent }}</td>
-                          <td>{{ game.crew }}</td>
-                      </template>
-              </tr>
-          </tbody>
-      </table>
+    <div class="header-actions">
+      <h2>Current Game Schedule</h2>
+      <div class="action-buttons">
+        <button class="purple-btn" @click="openModal">Add New Game</button>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Sport</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Venue</th>
+          <th>Opponent</th>
+          <th>Crew Positions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(game, index) in existingGames" :key="index">
+          <td>{{ game.sport }}</td>
+          <td>{{ game.date }}</td>
+          <td>{{ game.time }}</td>
+          <td>{{ game.venue }}</td>
+          <td>{{ game.opponent }}</td>
+          <td>{{ game.crewPositions?.join(', ') }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Modal Popup -->
+    <div v-if="showModal" class="modal-overlay">
+      <div class="modal-content">
+        <h2>Add New Game(s)</h2>
+
+        <div v-for="(game, index) in newGames" :key="index" class="game-inputs">
+          <label>Sport:</label>
+          <select v-model="game.sport">
+            <option value="">--</option>
+            <option value="baseball">Baseball</option>
+            <option value="football">Football</option>
+            <option value="soccer">Soccer</option>
+            <option value="">--</option>
+                          <option value="baseball">Baseball</option>
+                          <option value="basketball-men">Basketball, Men's</option>
+                          <option value="basketball-women">Basketball, Women's</option>
+                          <option value="beach-volleyball">Beach Volleyball</option>
+                          <option value="cc-men">Cross Country, Men's</option>
+                          <option value="cc-women">Cross Country, Women's</option>
+                          <option value="equestrian">Equestrian</option>
+                          <option value="football">Football</option>
+                          <option value="golf-men">Golf, Men's</option>
+                          <option value="golf-women">Golf, Women's</option>
+                          <option value="indoor-track-men">Indoor Track and Field, Men's</option>
+                          <option value="indoor-track-women">Indoor Track and Field, Women's</option>
+                          <option value="outdoor-track-men">Outdoor Track and Field, Men's </option>
+                          <option value="outdoor-track-women">Outdoor Track and Field, Women's</option>
+                          <option value="rifle">Rifle</option>
+                          <option value="soccer">Soccer</option>
+                          <option value="swimming-men">Swimming and Diving, Men's</option>
+                          <option value="swimming-women">Swimming and Diving, Women's</option>
+                          <option value="tennis-men">Tennis, Men's</option>
+                          <option value="tennis-women">Tennis, Women's</option>
+                          <option value="triathlon">Triathlon</option>
+                          <option value="volleyball">Volleyball</option>
+          </select>
+
+          <label>Date & Time:</label>
+          <input type="datetime-local" v-model="game.datetime" />
+
+          <label>Venue:</label>
+<select v-model="game.venue">
+  <option disabled value="">Select Venue</option>
+  <option>Amon G. Carter Stadium</option>
+  <option>Schollmaier Arena</option>
+  <option>Lupton Baseball Stadium</option>
+  <option>Garvey-Rosenthal Soccer Stadium</option>
+  <option>University Recreation Center</option>
+  <option>Beyer Track</option>
+  <option>TCU Tennis Center</option>
+  <option>Schaefer Success Center</option>
+  <option>Frog Alley</option>
+  <option>Lowdon Track and Field Complex</option>
+  <option>Sue & Edgar Wachenheim Courts</option>
+</select>
+
+          <label>Opponent (If any):</label>
+          <input type="text" v-model="game.opponent" placeholder="Opponent" />
+
+          <label>Required Crew Positions:</label>
+          <div class="crew-checkboxes">
+            <label v-for="(role, i) in crewRoles" :key="i">
+              <input type="checkbox" :value="role" v-model="game.crew" />
+              {{ role }}
+            </label>
+          </div>
+
+          <button @click="removeGame(index)">Remove</button>
+          <hr />
+        </div>
+
+        <div style="margin-top: 1rem">
+          <button @click="addGame">Add New Game</button>
+          <button @click="saveGames">Save New Games</button>
+          <button @click="showModal = false">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
-  <button @click="addGame">Add New Game</button>
-  <button @click="saveGames">Save New Game Schedule</button>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 
-  const baseURL = 'https://frogcrew-backend-2025.azurewebsites.net'; // backend URL
-
-const games = ref([])
+const existingGames = ref([])
+const newGames = ref([])
 const submitted = ref(false)
+const showModal = ref(false)
 
-const invalidIndices = computed(() => {
-if (!submitted.value) return []
-
-const gameList = games.value // <- fix: dereference the ref
-
-const hasAtLeastOneValid = gameList.some(
-  g => g.sport.trim() && g.datetime && g.venue.trim() && g.opponent.trim() && g.crew.length
-)
-
-if (hasAtLeastOneValid) return []
-
-return gameList
-  .map((g, i) => (!g.sport.trim() || !g.datetime || !g.venue.trim() || !g.opponent.trim() || g.crew.length === 0) ? i : null)
-  .filter(i => i !== null)
-})
+const crewRoles = [
+  'Assistant Director', 'Assistant Producer', 'Audio A1', 'Audio Assistant A2',
+  'Bug Operator', 'Camera Fixed', 'Camera Handheld', 'Camera Steadicam',
+  'Director', 'Engineer in Charge (EIC)', 'ENG 2', 'EVS Replay Lead',
+  'EVS Replay R/O', 'Graphic Operator', 'Producer', 'Technical Director',
+  'Timeout Coordinator', 'Video Operator', 'Sport Broadcaster',
+  'Paid Freelancer', 'Paid Student'
+]
 
 onMounted(() => {
-fetch(`${baseURL}/api/schedule`)
-  .then(res => res.json())
-  .then(data => {
-    games.value = data.map(g => ({ ...g, isNew: false })) // mark existing games
-  })
-  .catch(err => {
-    console.error('Failed to load schedule:', err)
-  })
+  fetch('http://localhost:8080/api/games')
+    .then(res => res.json())
+    .then(data => {
+      existingGames.value = data
+    })
+    .catch(err => {
+      console.error('Failed to fetch games:', err)
+    })
 })
 
+function openModal() {
+  newGames.value = []
+  addGame()
+  showModal.value = true
+}
+
 function addGame() {
-games.value.push({
-  sport: '',
-  datetime: '',
-  venue: '',
-  opponent: '',
-  crew: [],
-  isNew: true
-})
+  newGames.value.push({
+    sport: '',
+    datetime: '',
+    venue: '',
+    opponent: '',
+    crew: []
+  })
+}
+
+function removeGame(index) {
+  newGames.value.splice(index, 1)
 }
 
 function saveGames() {
-submitted.value = true; // highlight invalids
+  submitted.value = true
 
-const newGames = games.value
-  .map((game, index) => ({ game, index }))
-  .filter(({ game }) =>
-    game.isNew &&
-    game.sport.trim() &&
-    game.datetime &&
-    game.venue.trim() &&
-    game.crew.length
-  );
+  const validGames = newGames.value.filter(g =>
+    g.sport.trim() && g.datetime && g.venue.trim() && g.crew.length > 0
+  )
 
-if (!newGames.length) {
-  alert('Please enter valid game entries before saving.');
-  return;
-}
-
-// Check duplicates against existing games
-const existingGames = games.value.filter(g => !g.isNew);
-const duplicateAgainstExisting = [];
-
-for (const { game } of newGames) {
-  const isDuplicate = existingGames.some(existing =>
-    existing.sport.trim().toLowerCase() === game.sport.trim().toLowerCase() &&
-    existing.datetime === game.datetime &&
-    existing.venue.trim().toLowerCase() === game.venue.trim().toLowerCase()
-  );
-  if (isDuplicate) {
-    duplicateAgainstExisting.push(game);
+  if (validGames.length === 0) {
+    alert('Please enter valid games before saving.')
+    return
   }
-}
 
-if (duplicateAgainstExisting.length) {
-  alert('Error: One or more games you are trying to add already exist in the schedule.');
-  return;
-}
-
-// Check duplicates among new games themselves
-const seen = new Set();
-const duplicateAmongNew = newGames.some(({ game }) => {
-  const key = `${game.sport.trim().toLowerCase()}|${game.datetime}|${game.venue.trim().toLowerCase()}`;
-  if (seen.has(key)) {
-    return true;
-  }
-  seen.add(key);
-  return false;
-});
-
-if (duplicateAmongNew) {
-  alert('Error: Duplicate entries among newly added games.');
-  return;
-}
-
-const postData = newGames.map(({ game }) => ({
-  sport: game.sport.trim(),
-  datetime: game.datetime,
-  venue: game.venue.trim(),
-  opponent: game.opponent.trim(),
-  crew: game.crew
-}));
-
-fetch(`${baseURL}/api/schedule/add`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(postData)
-})
-  .then(res => {
-    if (!res.ok) throw new Error('Failed to save new games');
-    return res.json();
+  const postData = validGames.map(game => {
+    const [date, time] = game.datetime.split('T')
+    return {
+      sport: game.sport.trim(),
+      date,
+      time,
+      venue: game.venue.trim(),
+      opponent: game.opponent.trim(),
+      crewPositions: game.crew
+    }
   })
-  .then(() => {
-    alert('New games added successfully!');
 
-    // mark them as non-editable
-    newGames.forEach(({ index }) => {
-      games.value[index].isNew = false;
-    });
-
-    submitted.value = false; // reset validation
-
-    // to send the notification
-    notifyScheduleUpdate();
+  fetch('http://localhost:8080/api/games', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(postData)
   })
-  .catch(err => {
-    console.error(err);
-    alert('Error adding games.');
-  });
-}
-
-function notifyScheduleUpdate() {
-fetch(`${baseURL}/api/notify-schedule-update`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ message: 'Schedule has been updated with new games.' })
-})
-  .then(res => {
-    if (!res.ok) throw new Error('Failed to send notifications');
-    console.log('Notifications sent to crew and admins.');
-  })
-  .catch(err => {
-    console.error('Error notifying users:', err);
-  });
+    .then(res => {
+      if (!res.ok) throw new Error('Failed to save games')
+      return res.json()
+    })
+    .then(() => {
+      alert('Games added successfully!')
+      newGames.value = []
+      submitted.value = false
+      showModal.value = false
+      return fetch('http://localhost:8080/api/games')
+    })
+    .then(res => res.json())
+    .then(data => {
+      existingGames.value = data
+    })
+    .catch(err => {
+      console.error('Error adding games:', err)
+      alert('Error adding games.')
+    })
 }
 </script>
 
 <style scoped>
 .schedule {
-max-width: 1000px;
-margin: 2rem auto;
-padding: 1rem;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
 }
 
-table {
-width: 100%;
-border-collapse: collapse;
-background-color: white;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-border-radius: 12px;
-overflow: hidden;
+.purple-btn {
+  background-color: #4D1979;
+  color: white;
+  font-weight: bold;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.purple-btn:hover {
+  background-color: #6d2c91;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 800px;
 }
 
 th,
 td {
-padding: 1rem;
-text-align: left;
-border-bottom: 1px solid #ddd;
-vertical-align: top;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  text-align: left;
 }
 
-th {
-background-color: #4D1979;
-color: white;
-font-weight: 600;
-}
-
-select,
-input[type="text"],
-input[type="datetime-local"] {
-width: 100%;
-padding: 0.5rem;
-border: 1px solid #ccc;
-border-radius: 6px;
-font-size: 1rem;
-}
-
-input[type="checkbox"] {
-margin-right: 0.5rem;
-}
-
-label {
-margin-right: 1rem;
-font-size: 0.95rem;
-}
-
-button {
-padding: 0.6rem 1.2rem;
-margin-right: 1rem;
-border: none;
-border-radius: 8px;
-background-color: #4D1979;
-color: white;
-font-weight: 600;
-cursor: pointer;
-transition: background-color 0.3s ease;
-}
-
-button:hover {
-background-color: #6d2c91;
-}
-
-button:disabled {
-background-color: #ccc;
-cursor: not-allowed;
+.game-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .crew-checkboxes {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-gap: 0.5rem;
-max-height: 200px;
-overflow-y: auto;
-padding: 0.5rem;
-border: 1px solid #ccc;
-border-radius: 6px;
-background-color: #f9f9f9;
-}
-
-.checkbox-group {
-display: flex;
-align-items: center;
-gap: 0.5rem;
-white-space: nowrap;
-}
-
-div[style*="margin-top"] {
-text-align: center;
-margin-top: 2rem !important;
-}
-
-.invalid {
-border: 2px dashed red !important;
-border-radius: 6px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.5rem 1rem;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f9f9f9;
 }
 </style>

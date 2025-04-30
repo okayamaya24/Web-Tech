@@ -19,9 +19,13 @@
         <label>{{ position }}:</label>
         <select v-model="assignments[position]">
           <option disabled value="">Select crew member</option>
-          <option v-for="member in availableCrew" :key="member.id" :value="member.id">
-            {{ member.name }} ({{ member.qualifications.join(', ') }})
-          </option>
+          <option
+  v-for="member in availableCrew.filter(m => m.qualifications.includes(position))"
+  :key="member.id"
+  :value="member.id"
+>
+  {{ member.name }} ({{ member.qualifications.join(', ') }})
+</option>
         </select>
       </div>
 
@@ -62,9 +66,12 @@ games.value = data;
 };
 
 const fetchAvailableCrew = async (gameId) => {
-const response = await fetch(`/api/available-crew/${gameId}`);
-const data = await response.json();
-availableCrew.value = data;
+  const response = await fetch(`http://localhost:8080/api/availability/available-crew/${gameId}`);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch available crew: ${response.statusText}`);
+  }
+  const data = await response.json();
+  availableCrew.value = data;
 };
 
 const selectedGame = computed(() => {
